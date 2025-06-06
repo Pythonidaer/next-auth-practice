@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from "react";
+import Link from "next/link";
 import { FiMenu, FiX } from "react-icons/fi";
 import styles from "./Navbar.module.css";
 
@@ -17,11 +18,11 @@ export default function Navbar() {
 
   return (
     <nav className={styles.navbar}>
-      <a href="/" className={styles.logoSection}>
+      <Link href="/" className={styles.logoSection}>
         {/* Placeholder logo icon */}
         <span className={styles.logoIcon}>▲</span>
         <span className={styles.logoText}>Auth App</span>
-      </a>
+      </Link>
       <ul className={styles.navItems}>
         {navItems.map((item) => (
           <li key={item.label}>
