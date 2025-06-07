@@ -11,6 +11,12 @@ const handler = NextAuth({
   pages: {
     signIn: '/auth/signin', // optional
   },
+  callbacks: {
+    async redirect({ url, baseUrl }) {
+      // Always redirect to homepage after sign-in
+      return baseUrl
+    }
+  }
 })
 
 export { handler as GET, handler as POST }
