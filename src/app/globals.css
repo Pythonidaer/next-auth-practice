@@ -3,7 +3,20 @@ html, body {
   overflow-x: hidden;
   margin: 0;
   padding: 0;
+  background-color: rgba(73, 33, 33, 1);
+  color: rgba(255, 255, 255, 1);
+  min-height: 100vh;
 }
 *, *::before, *::after {
   box-sizing: inherit;
+}
+
+@media (max-width: 900px) {
+  body {
+    background-image: url('/splatter.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
 }
