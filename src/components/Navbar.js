@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FiMenu, FiX } from "react-icons/fi";
 import { FaSpinner } from "react-icons/fa";
 import styles from "./Navbar.module.css";
+import Image from 'next/image';
 
 const navItems = [
   { label: "Auth Test Page", href: "/authorization-test" },
@@ -56,8 +57,14 @@ export default function Navbar() {
   return (
     <nav className={styles.navbar}>
       <Link href="/" className={styles.logoSection}>
-        <span className={styles.logoIcon}>▲</span>
-        <span className={styles.logoText}>Auth App</span>
+        <Image
+          src="/logo.png" 
+          alt="Meatbag Logo"
+          width={62}       
+          height={51}     
+          className={styles.logoIcon}
+        />
+        <span className={styles.logoText}>Meatbag</span>
       </Link>
 
       <ul className={styles.navItems}>

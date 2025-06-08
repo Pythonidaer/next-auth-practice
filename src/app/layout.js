@@ -3,9 +3,12 @@ import AuthProvider from './context/AuthProvider'
 
 import Navbar from "../components/Navbar";
 
-import { Inter } from 'next/font/google'
+import { League_Spartan } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin'] })
+const leagueSpartan = League_Spartan({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
 
 
 export const metadata = {
@@ -16,7 +19,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <head>
+        <link rel="preload" href="/fonts/LeagueGothic-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+      </head>
+      <body className={leagueSpartan.className}>
         <AuthProvider>
           <Navbar />{children}
         </AuthProvider>
