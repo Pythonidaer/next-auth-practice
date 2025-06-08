@@ -1,8 +1,9 @@
 'use client'
 import { signIn, signOut, useSession } from 'next-auth/react'
-import React, { useState, useEffect } from "react"; // Removed duplicate useState as useClientState
+import React, { useState } from "react"; // Removed duplicate useState as useClientState
 import Link from "next/link";
 import { FiMenu, FiX } from "react-icons/fi";
+import { FaSpinner } from "react-icons/fa";
 import styles from "./Navbar.module.css";
 
 const navItems = [
@@ -12,28 +13,20 @@ const navItems = [
 
 export default function Navbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isClient, setIsClient] = useState(false); // Use standard useState
-
   const { data: session, status } = useSession();
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   // Helper function to render auth buttons/greeting
   const renderAuthControls = () => {
-    // If not on client yet, render nothing or a minimal placeholder
-    if (!isClient) {
-      // You could add a placeholder div here to reserve space if needed
-      // return <div style={{ minWidth: '100px', height: '30px' }}></div>;
-      return null;
-    }
+
 
     // While session is loading, show a loading indicator or placeholder
     if (status === "loading") {
       return (
         <li key="auth-loading">
-          <div className={styles.authPlaceholder}></div> {/* Use a placeholder div */}
+          <div className={styles.authPlaceholder}>
+            <FaSpinner className={styles.spinner} />
+          </div>
         </li>
       );
     }
@@ -41,14 +34,9 @@ export default function Navbar() {
     // If authenticated, show user greeting and logout button
     if (status === "authenticated") {
       return (
-        <>
-          <li className={styles.userGreeting} key="user-greeting">
-            Hello, {session.user?.name || session.user?.email}
-          </li>
-          <li key="logout">
-            <button className={styles.navButton} type="button" onClick={() => signOut({ callbackUrl: '/' })}>Log Out</button>
-          </li>
-        </>
+        <li key="logout">
+          <button className={styles.navButton} type="button" onClick={() => signOut({ callbackUrl: '/' })}>Log Out</button>
+        </li>
       );
     }
 

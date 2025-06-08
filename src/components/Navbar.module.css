@@ -141,14 +141,30 @@
 .authPlaceholder {
   /* Adjust these values to match the approximate size of your buttons */
   width: 80px; /* Example width */
-  height: 36px; /* Example height */
-  background-color: #eee; /* A subtle grey to indicate loading */
-  border-radius: 4px; /* Soften edges */
-  /* Add animation for a skeleton effect if desired */
-  animation: pulse 1.5s infinite ease-in-out;
+  background-color: #111;
+  color: #fff;
+  cursor: pointer;
+  font-size: 15px;
+  border-radius: .375rem;
+  padding: 10px 12px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  font-size: 1.2em; /* adjust as needed */
 }
 
 .navButton {
+  min-width: 80px;
   background: #111;
   color: #fff;
   border: none;
@@ -162,10 +178,4 @@
 
 .navButton:hover {
   background-color: rgba(0,0,0,.8)
-}
-
-@keyframes pulse {
-  0% { opacity: 0.7; }
-  50% { opacity: 1; }
-  100% { opacity: 0.7; }
 }
