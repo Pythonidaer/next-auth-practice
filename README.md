@@ -7,6 +7,7 @@ Working on NextAuth in this iteration.
 ## Linting & Formatting
 
 ### Run ESLint
+
 - Lint your codebase:
   ```sh
   npx eslint .
@@ -20,6 +21,7 @@ Working on NextAuth in this iteration.
 - Add the ESLint extension to your editor to see squigglies for the rules in .eslintrc.mjs
 
 ### Run Prettier
+
 - Format your entire codebase:
   ```sh
   npx prettier --write .
@@ -32,6 +34,36 @@ Working on NextAuth in this iteration.
 
 ---
 
+## Pre-Commit Hooks (Husky & lint-staged)
+
+This project uses **Husky** and **lint-staged** to automatically lint and format your code before each commit.
+
+### How it works
+
+- On every `git commit`, Husky runs lint-staged, which:
+  - Lints and auto-formats staged JS/TS files with ESLint and Prettier
+  - Formats staged JSON, CSS, and Markdown files with Prettier
+- If any lint or format errors are found, the commit is blocked until they are fixed.
+
+### Setup (already configured)
+
+- Husky and lint-staged are installed as devDependencies.
+- Husky is initialized in your repo (see `prepare` script in `package.json`).
+- The `.husky/pre-commit` file runs `npx lint-staged`.
+- The `lint-staged` config is in `package.json`.
+
+### Usage
+
+- Just stage your changes and commit as usual:
+  ```sh
+  git add <file>
+  git commit -m "your message"
+  ```
+- If there are any lint/format errors, the commit will fail with an explanation.
+- Fix the errors, re-stage, and try again.
+
+---
+
 ## Testing
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
@@ -39,6 +71,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to see the r
 ---
 
 ## Cyclomatic Complexity
+
 - For more info, try tools like "Cognitive Complexity Reducer GPT".
 - **General formula:**
   ```
