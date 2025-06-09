@@ -1,28 +1,26 @@
-'use client'
-import { signIn, signOut, useSession } from 'next-auth/react'
-import React, { useState } from "react"; // Removed duplicate useState as useClientState
-import Link from "next/link";
-import { FiMenu, FiX } from "react-icons/fi";
-import { FaSpinner } from "react-icons/fa";
-import styles from "./Navbar.module.css";
+'use client';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { FiMenu, FiX } from 'react-icons/fi';
+import { FaSpinner } from 'react-icons/fa';
+import styles from './Navbar.module.css';
 import Image from 'next/image';
 
 const navItems = [
-  { label: "Auth Test Page", href: "/authorization-test" },
-  { label: "Sign Up", href: "#" },
+  { label: 'Auth Test Page', href: '/authorization-test' },
+  { label: 'Sign Up', href: '#' },
 ];
 
 export default function Navbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { data: session, status } = useSession();
-
+  // can also destructure and alias data: session if needed below:
+  const { status } = useSession();
 
   // Helper function to render auth buttons/greeting
   const renderAuthControls = () => {
-
-
     // While session is loading, show a loading indicator or placeholder
-    if (status === "loading") {
+    if (status === 'loading') {
       return (
         <li key="auth-loading">
           <div className={styles.authPlaceholder}>
@@ -33,19 +31,31 @@ export default function Navbar() {
     }
 
     // If authenticated, show user greeting and logout button
-    if (status === "authenticated") {
+    if (status === 'authenticated') {
       return (
         <li key="logout">
-          <button className={styles.navButton} type="button" onClick={() => signOut({ callbackUrl: '/' })}>Log Out</button>
+          <button
+            className={styles.navButton}
+            type="button"
+            onClick={() => signOut({ callbackUrl: '/' })}
+          >
+            Log Out
+          </button>
         </li>
       );
     }
 
     // If unauthenticated, show login button
-    if (status === "unauthenticated") {
+    if (status === 'unauthenticated') {
       return (
         <li key="login">
-          <button className={styles.navButton} type="button" onClick={() => signIn()}>Log In</button>
+          <button
+            className={styles.navButton}
+            type="button"
+            onClick={() => signIn()}
+          >
+            Log In
+          </button>
         </li>
       );
     }
@@ -58,10 +68,10 @@ export default function Navbar() {
     <nav className={styles.navbar}>
       <Link href="/" className={styles.logoSection}>
         <Image
-          src="/logo.png" 
+          src="/logo.png"
           alt="Meatbag Logo"
-          width={62}       
-          height={51}     
+          width={62}
+          height={51}
           className={styles.logoIcon}
         />
         <span className={styles.logoText}>Meatbag</span>
@@ -83,7 +93,9 @@ export default function Navbar() {
         aria-label="Open menu"
         onClick={() => setSidebarOpen(true)}
       >
-        <span className={styles.hamburgerIcon}><FiMenu /></span>
+        <span className={styles.hamburgerIcon}>
+          <FiMenu />
+        </span>
       </button>
 
       {sidebarOpen && (
@@ -94,7 +106,9 @@ export default function Navbar() {
               aria-label="Close menu"
               onClick={() => setSidebarOpen(false)}
             >
-              <span className={styles.closeIcon}><FiX /></span>
+              <span className={styles.closeIcon}>
+                <FiX />
+              </span>
             </button>
             <ul className={styles.sidebarNavItems}>
               {navItems.map((item) => (

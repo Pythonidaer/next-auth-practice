@@ -1,5 +1,5 @@
-import NextAuth from 'next-auth'
-import GitHubProvider from 'next-auth/providers/github'
+import NextAuth from 'next-auth';
+import GitHubProvider from 'next-auth/providers/github';
 
 const handler = NextAuth({
   providers: [
@@ -12,11 +12,16 @@ const handler = NextAuth({
     signIn: '/auth/signin', // optional
   },
   callbacks: {
-    async redirect({ url, baseUrl }) {
-      // Always redirect to homepage after sign-in
-      return baseUrl
-    }
-  }
-})
+    // can also pass url as a param
+    async redirect({ baseUrl }) {
 
-export { handler as GET, handler as POST }
+      // Only allow redirects within your site
+      // return url.startsWith(baseUrl) ? url : baseUrl;
+
+      // Always redirect to homepage after sign-in
+      return baseUrl;
+    },
+  },
+});
+
+export { handler as GET, handler as POST };

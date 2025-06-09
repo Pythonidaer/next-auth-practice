@@ -1,7 +1,7 @@
-import "./globals.css";
-import AuthProvider from './context/AuthProvider'
+import './globals.css';
+import AuthProvider from './context/AuthProvider';
 
-import Navbar from "../components/Navbar";
+import Navbar from '../components/Navbar';
 
 import { League_Spartan } from 'next/font/google';
 
@@ -10,22 +10,34 @@ const leagueSpartan = League_Spartan({
   weight: ['400', '700'],
 });
 
-
 export const metadata = {
-  title: "Hello Next Auth",
-  description: "Blank Next.js Auth Starter",
+  title: 'DEMO: Next Auth',
+  description: 'Blank Next.js Auth Starter',
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <link rel="preload" href="/fonts/LeagueGothic-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="/fonts/LeagueGothic-Regular.woff" as="font" type="font/woff" crossOrigin="anonymous" />
+        <link
+          rel="preload"
+          href="/fonts/LeagueGothic-Regular.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/LeagueGothic-Regular.woff"
+          as="font"
+          type="font/woff"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className={leagueSpartan.className}>
         <AuthProvider>
-          <Navbar />{children}
+          <Navbar />
+          {children}
         </AuthProvider>
       </body>
     </html>
