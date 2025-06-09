@@ -21,6 +21,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <link rel="preload" href="/fonts/LeagueGothic-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/LeagueGothic-Regular.woff" as="font" type="font/woff" crossOrigin="anonymous" />
       </head>
       <body className={leagueSpartan.className}>
         <AuthProvider>
