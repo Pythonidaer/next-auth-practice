@@ -1,0 +1,48 @@
+/* Button.module.css */
+.button {
+  border: none;
+  border-radius: 999px; /* pill shape */
+  padding: 1rem 1.5rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  min-width: 273px;
+}
+
+.red {
+  background-color: #a72e2e;
+  color: white;
+}
+
+.green {
+  background-color: #2e7d32;
+  color: white;
+}
+
+.white {
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
+}
+
+.blue {
+  background-color: #4a7bdc;
+  color: white;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .button {
+    width: 100%;
+  }
+}
