@@ -80,6 +80,7 @@
   border: none;
   font-size: 55px;
   cursor: pointer;
+  padding: 0;
 }
 
 @media (max-width: 900px) {
