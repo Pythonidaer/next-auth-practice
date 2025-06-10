@@ -4,6 +4,8 @@ Working on NextAuth in this iteration.
 
 ---
 
+To DO: Create Splash Flow with Auth Sess
+
 ## Linting & Formatting
 
 ### Run ESLint
