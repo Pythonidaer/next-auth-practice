@@ -1,8 +1,7 @@
 import './globals.css';
 import AuthProvider from './context/AuthProvider';
-
-import Navbar from '../components/Navbar';
-
+import Navbar from '../components/Navbar/Navbar';
+import ClientLayout from '../components/ClientLayout'; // <-- new
 import { League_Spartan } from 'next/font/google';
 
 const leagueSpartan = League_Spartan({
@@ -35,10 +34,12 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className={leagueSpartan.className}>
-        <AuthProvider>
-          <Navbar />
-          {children}
-        </AuthProvider>
+        <ClientLayout>
+          <AuthProvider>
+            <Navbar />
+            {children}
+          </AuthProvider>
+        </ClientLayout>
       </body>
     </html>
   );

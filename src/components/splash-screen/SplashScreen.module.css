@@ -1,0 +1,28 @@
+.splashScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #492121;
+  background-image: url('/splatter.png');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  width: 140px;
+  height: 110px;
+  margin-bottom: 24px;
+}
+
+.brandText {
+  color: #fff;
+  font-family: 'League Gothic', Arial, sans-serif;
+  font-size: 60px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-align: center;
+}
