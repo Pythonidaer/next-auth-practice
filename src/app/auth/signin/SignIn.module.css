@@ -1,0 +1,39 @@
+.container {
+  min-height: calc(100vh - 168px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.brandSection {
+  margin-bottom: 3rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logoWrapper {
+  margin-bottom: 0;
+}
+
+.logo {
+  min-width: 140px;
+  max-width: 230px;
+  height: auto;
+  transform: rotate(-6.94deg);
+}
+
+.brandText {
+  font-size: clamp(8rem, 12vw, 130px);
+  font-family: 'League Gothic', Arial, sans-serif;
+}
+
+.buttonGroup {
+  width: 80%;
+  max-width: 350px;
+  display: flex;
+  flex-direction: column;
+}
