@@ -35,9 +35,9 @@ export default function Home() {
     alert('Day button clicked!');
   }
 
-  if (status === 'loading') {
-    return <h1>Loading...</h1>;
-  }
+  // if (status === 'loading') {
+  //   return <h1>Loading...</h1>;
+  // }
 
   if (status === 'unauthenticated') {
     return (
@@ -70,6 +70,7 @@ export default function Home() {
       </div>
     );
   }
-
-  return <h1>Welcome, {getFirstName(session?.user?.name)}</h1>;
+  if (status === 'authenticated') {
+    return <h1>Welcome, {getFirstName(session?.user?.name)}</h1>;
+  }
 }

@@ -85,3 +85,28 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to see the r
   ```
   Cyclomatic Complexity = Number of decision points + 1
   ```
+
+---
+
+## ClientLayout Splash Screen & Hydration Logic
+
+This section documents the logic and rationale behind the splash screen and hydration strategy implemented in `ClientLayout.jsx`.
+
+### Splash Screen Display Logic
+
+- The splash screen is always shown for a fixed duration (`splashDuration`, e.g., 3000ms) on every page load.
+- The presence of a `sessionStorage` token (`splashShown`) is used only to prevent the token from being set more than once per session, **not** to skip the splash screen.
+- The splash screen will always be visible for the specified duration, regardless of whether the session token is present.
+- The session token is set after the splash is shown for the first time in a session, but does not affect the splash display on subsequent loads within the session.
+
+### Hydration Strategy
+
+- The component uses a custom `useHydrated` hook to determine if the app has been hydrated on the client.
+- On the server (SSR), the splash screen is always rendered to avoid hydration mismatches.
+- Once hydration is complete, the splash logic and transition to the main content are handled on the client.
+
+### TO DO:
+
+- Tie splash screen to auth state
+- Reconsider which pages should show splash screen
+  - This also ties into user journey and restricted entry points

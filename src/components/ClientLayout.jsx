@@ -3,30 +3,51 @@ import { useEffect, useState } from 'react';
 import SplashScreen from './splash-screen/SplashScreen';
 import styles from '@/components/shared/AppTransition.module.css';
 
+function useHydrated() {
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+  return hydrated;
+}
+
 export default function ClientLayout({ children }) {
-  const [loading, setLoading] = useState(true);
+  const hydrated = useHydrated();
+  const [showSplash, setShowSplash] = useState(true);
+  const splashDuration = 3000;
 
   useEffect(() => {
-    // Only show splash if not previously shown in this session
-    // Sessions only last for the duration of the page load
-    const splashShown = window.sessionStorage.getItem('splashShown');
-    if (splashShown) {
-      setLoading(false);
-      return;
-    }
+    if (!hydrated) return;
+    const splashAlreadyShown = window.sessionStorage.getItem('splashShown');
     const timer = setTimeout(() => {
-      setLoading(false);
-      window.sessionStorage.setItem('splashShown', 'true');
-    }, 1500);
+      setShowSplash(false);
+      if (!splashAlreadyShown) {
+        window.sessionStorage.setItem('splashShown', 'true');
+      }
+    }, splashDuration);
     return () => clearTimeout(timer);
-  }, []);
+  }, [hydrated, splashDuration]); // Add splashDuration to dependency array
+
+  if (!hydrated) {
+    return (
+      <div className={styles.splashWrapper}>
+        <SplashScreen />
+      </div>
+    );
+  }
 
   return (
     <>
-      {loading && <SplashScreen />}
-      <div className={`${styles.pageWrapper} ${!loading ? styles.loaded : ''}`}>
+      <div
+        className={`${styles.splashWrapper} ${!showSplash ? styles.splashHidden : ''}`}
+      >
+        <SplashScreen />
+      </div>
+      <div
+        className={`${styles.pageWrapper} ${!showSplash ? styles.loaded : ''}`}
+      >
         {children}
-      </div>{' '}
+      </div>
     </>
   );
 }
