@@ -2,3 +2,18 @@
 .buttonGroup {
   margin: 0 45px;
 }
+
+/* on larger screens make margin 0 auto */
+@media (min-width: 901px) {
+  .buttonGroup {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 900px) {
+  .buttonGroup {
+    width: calc(100% - 90px);
+  }
+}

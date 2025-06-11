@@ -2,18 +2,21 @@
   display: flex;
   flex-direction: column;
   min-height: calc(100dvh - 131px); /* 131px = navbar height */
+  align-items: center;
 }
 
 .flexGrow {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Or center if you prefer */
+  justify-content: flex-start;
 }
 
 .stickyBottom {
   margin-top: auto;
-  /* Optionally add padding or background here */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .buttonGroup {
