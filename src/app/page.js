@@ -1,15 +1,18 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Button from '../components/Button/Button';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import getFirstName from '../utils/getFirstName';
 import Image from 'next/image';
 import styles from './page.module.css';
+import { dummyUserWorkoutData } from '../data/dummyUserWorkoutData';
 
 export default function Home() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const firstIncompleteDay = dummyUserWorkoutData.find((day) => !day.complete);
+  const numExercises = firstIncompleteDay?.exercises?.length || 0;
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -48,15 +51,19 @@ export default function Home() {
             />
             <Button
               color="red"
-              label="Day #"
-              onClick={() => router.push('/')}
+              label={`Day ${firstIncompleteDay.dayNumber}`}
+              onClick={() =>
+                router.push(`/workout/${firstIncompleteDay.dayNumber}/0`)
+              }
             />
           </div>
           <div className={styles.footerSection}>
             <div className={styles.footerTitle}>
               {getFirstName(session?.user?.name)}&apos;S GET SWOLE WORKOUT
             </div>
-            <div className={styles.footerSubtitle}># EXERCISES</div>
+            <div className={styles.footerSubtitle}>
+              {numExercises} EXERCISES
+            </div>
           </div>
         </div>
       </>
