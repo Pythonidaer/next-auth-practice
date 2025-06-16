@@ -25,7 +25,16 @@ export default function SignInPage() {
       {/* Buttons */}
       <div className={styles.buttonGroup}>
         <Button color="white" label="LOGIN" onClick={() => signIn('google')} />
-        <Button color="red" label="SIGNUP" onClick={() => signIn('google')} />
+        <Button
+          color="red"
+          label="SIGNUP WITH GOOGLE"
+          onClick={() => signIn('google')}
+        />
+        {/* <Button
+          color="blue"
+          label="SIGNUP WITH EMAIL"
+          onClick={() => signIn('email')}
+        /> */}
       </div>
     </div>
   );
