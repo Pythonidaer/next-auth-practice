@@ -2,7 +2,10 @@
 module.exports = {
   testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.(js|jsx)$': 'babel-jest',
+    '^.+\\.(js|jsx|ts|tsx)$': [
+      'babel-jest',
+      { configFile: './babel.jest.config.js' },
+    ],
   },
   moduleNameMapper: {
     '\\.(css|scss|sass)$': 'identity-obj-proxy',
@@ -26,6 +29,7 @@ module.exports = {
     // If for some reason these specific JS files are appearing outside
     // the /coverage/ or /jest-stare/ folders and are *not* your app code,
     // you would add their specific paths here, e.g.:
+    '<rootDir>/babel.jest.config.js',
     // '<rootDir>/path/to/block-navigation.js',
   ],
   reporters: [
