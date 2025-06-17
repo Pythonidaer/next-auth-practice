@@ -15,6 +15,11 @@ page copy.js
 
 # testing
 /coverage
+/jest-stare
+
+# source code below ! essential for version control, collaboration, CI/CD, and documentation - don't ignore!
+# **/*.test.*
+# **/*.spec.*
 
 # next.js
 /.next/
