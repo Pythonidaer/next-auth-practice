@@ -129,16 +129,162 @@ We are using:
 
 #### TO DOs (Testing & CI/CD)
 
-- Achieve 90%+ test coverage
-- Track how coverage changes across unit, integration, and end-to-end layers
-- Use GitHub Actions to run tests before merging PRs
-- Add coverage thresholds (initially disabled) and integrate into CI/CD
-- Understand naming of test suites and ways to visualize test groupings
-- Select and implement a documentation generation library
-- Define `.windsurfrules` for prompt-driven TDD workflows
-  - Describe a feature → LLM writes tests → LLM writes code to pass them
-- Cleanup global vs. modular CSS
-- Standardize naming, improve linting rules, and enforce consistency
+#### **Sign-In Page**
+
+- **File:** `src/app/auth/signin/page.test.js`
+- **What’s Tested:**
+  - Renders logo, brand text, and "Login"/"Signup" buttons.
+  - Mocks `signIn` and checks it is called with "google" when Login is clicked.
+  - Mocks Next.js Image and Button.
+- **Insights:**
+  - Focuses on visible output and user interaction.
+  - All external dependencies are mocked for isolation.
+
+#### **AuthProvider**
+
+- **File:** `src/app/context/AuthProvider.test.js`
+- **What’s Tested:**
+  - Mocks `SessionProvider` from `next-auth/react`.
+  - Checks children are wrapped by the provider.
+- **Insights:**
+  - Only the contract and visible output are tested.
+  - Includes an explanation block for future maintainers.
+  - **Error/Resolution:** Always import React in `.js` files using JSX.
+
+#### **NextAuth API Route**
+
+- **File:** `src/app/api/auth/[...nextauth]/route.test.js`
+- **What’s Tested:**
+  - Mocks NextAuth and GoogleProvider.
+  - Ensures environment variables are set.
+  - Checks route logic with mocks.
+- **Insights:**
+  - No real OAuth/network calls.
+  - Ensures test isolation and avoids side effects.
+
+---
+
+### 3. **Root Pages & Layout**
+
+#### **Root Layout**
+
+- **File:** `src/app/layout.test.js`
+- **What’s Tested:**
+  - Mocks Navbar, AuthProvider, ClientLayout, and font.
+  - Asserts children and key layout components are rendered.
+  - Checks font class and metadata export.
+- **Insights:**
+  - Focuses on contract and visible output.
+  - Mocks all providers for isolation.
+  - See explanation block for best practices and scope.
+
+#### **Home Page**
+
+- **File:** `src/app/page.test.js`
+- **What’s Tested:**
+  - Mocks session, navigation, Button, utility functions, CSS modules, and dummy user data.
+  - Renders brand, buttons, and correct behavior based on session.
+  - Simulates user interactions and navigation.
+- **Insights:**
+  - Comprehensive: covers rendering and user interaction.
+  - All dependencies are mocked.
+
+---
+
+### 4. **Workout/Exercise Pages**
+
+#### **Workout Exercise Page**
+
+- **File:** `src/app/workout/[day]/[exercise]/page.test.js`
+- **What’s Tested:**
+  - Mocks CSS modules, `ExerciseCard`, `ExerciseActions`, utility functions, and dummy user data.
+  - Verifies rendering and interaction with mocked data/components.
+- **Insights:**
+  - Isolates page logic by mocking all dependencies.
+  - Good example of integration/unit hybrid testing for a dynamic route.
+
+---
+
+### 5. **Reusable Components**
+
+#### **Button**
+
+- **File:** `src/components/Button/Button.test.jsx`
+- **What’s Tested:**
+  - Renders with default and each color prop.
+  - Renders with an icon.
+  - Calls `onClick` when clicked.
+  - Applies the provided `type` attribute.
+- **Insights:**
+  - Mocks CSS modules for classNames.
+  - Covers all major prop combinations and interactions.
+
+#### **Exercise Actions**
+
+- **File:** `src/components/ExerciseCard/ExerciseActions.test.jsx`
+- **What’s Tested:**
+  - Renders all action buttons with correct labels and icons.
+  - Does not crash if `exerciseId` is missing.
+- **Insights:**
+  - Ensures all user actions are visible and accessible.
+
+#### **Exercise Card**
+
+- **File:** `src/components/ExerciseCard/ExerciseCard.test.jsx`
+- **What’s Tested:**
+  - Renders exercise name, rep count, working sets, and details.
+  - Handles missing optional props.
+- **Insights:**
+  - Validates both full and minimal prop scenarios.
+
+#### **Navbar**
+
+- **File:** `src/components/Navbar/Navbar.test.jsx`
+- **What’s Tested:**
+  - Mocks auth, navigation, images, icons, and nav items.
+  - Tests rendering, menu toggling, sign-in/out, and loading states.
+- **Insights:**
+  - Comprehensive: covers both desktop and mobile menu logic, auth states, and accessibility.
+
+---
+
+### 6. **Unique Components**
+
+#### **ClientLayout (Splash Logic)**
+
+- **File:** `src/components/ClientLayout.test.js`
+- **What’s Tested:**
+  - Mocks SplashScreen.
+  - Mocks and manipulates `window.sessionStorage`.
+  - Uses fake timers to simulate splash hiding.
+  - Ensures correct rendering and state transitions.
+- **Insights:**
+  - Demonstrates advanced mocking and timer control.
+  - Ensures splash logic is robust and isolated.
+
+---
+
+### 7. **Data**
+
+#### **Dummy User Workout Data**
+
+- **File:** `src/data/dummyUserWorkoutData.test.js`
+- **What’s Tested:**
+  - Ensures data is an array with at least one workout day.
+  - Each day has `dayNumber`, `complete`, and `exercises`.
+  - Each exercise has required fields and correct types.
+- **Insights:**
+  - Validates structure and types for mock data used throughout the app.
+
+---
+
+## 📝 **General Testing Insights & Best Practices**
+
+- **Mocks:** All external dependencies (APIs, providers, CSS modules, images, etc.) are mocked in tests to ensure isolation and reliability.
+- **Accessibility:** Tests use accessible queries (`getByRole`, `getByText`) to ensure components are discoverable for assistive technologies.
+- **Visible Output:** Tests focus on what the user sees and interacts with, not internal implementation details.
+- **Maintainability:** Explanation blocks in key test files guide future contributors on best practices and common pitfalls.
+- **Error Handling:** Tests often include scenarios for missing or malformed props/data to ensure robustness.
 
 ---
 
