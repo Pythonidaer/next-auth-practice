@@ -3,7 +3,7 @@
  returns empty string if no name is provided
 */
 function getFirstName(fullName) {
-  if (!fullName) {
+  if (typeof fullName !== 'string' || !fullName) {
     return '';
   }
   return fullName.trim().split(' ')[0];
