@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 import { useEffect, useState } from 'react';
 import SplashScreen from './splash-screen/SplashScreen';
 import styles from '@/components/shared/AppTransition.module.css';
@@ -39,11 +40,13 @@ export default function ClientLayout({ children }) {
   return (
     <>
       <div
+        data-testid="splash-container"
         className={`${styles.splashWrapper} ${!showSplash ? styles.splashHidden : ''}`}
       >
         <SplashScreen />
       </div>
       <div
+        data-testid="children-container"
         className={`${styles.pageWrapper} ${!showSplash ? styles.loaded : ''}`}
       >
         {children}

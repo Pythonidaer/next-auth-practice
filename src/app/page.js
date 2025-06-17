@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 import { useEffect } from 'react';
 import Button from '../components/Button/Button';
 import { useSession } from 'next-auth/react';
@@ -12,6 +13,8 @@ export default function Home() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const firstIncompleteDay = dummyUserWorkoutData.find((day) => !day.complete);
+  // Not testing for this because this is dummy data
+  // The data model will likely look very different
   const numExercises = firstIncompleteDay?.exercises?.length || 0;
 
   useEffect(() => {
