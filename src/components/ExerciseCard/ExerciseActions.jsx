@@ -1,6 +1,6 @@
 // src/components/ExerciseCard/ExerciseActions.jsx
+'use client';
 import React from 'react';
-('use client');
 import Button from '@/components/Button/Button';
 import styles from './ExerciseActions.module.css';
 import { FaStopwatch } from 'react-icons/fa';

@@ -1,3 +1,4 @@
+// src/components/Navbar/Navbar.jsx
 'use client';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import React, { useState } from 'react';
@@ -7,9 +8,8 @@ import { FaSpinner } from 'react-icons/fa';
 import styles from './Navbar.module.css';
 import Image from 'next/image';
 
-const navItems = [
-  // { label: 'Sign Up', href: '#' },
-];
+// Import navItems from its dedicated file
+import navItems from './navItems'; // <--- This line is the key change!
 
 export default function Navbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -110,14 +110,20 @@ export default function Navbar() {
               </span>
             </button>
             <ul className={styles.sidebarNavItems}>
-              {navItems.map((item) => (
-                <li key={item.label}>
-                  <Link href={item.href} onClick={() => setSidebarOpen(false)}>
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-              {/* Also use the helper function for sidebar */}
+              {navItems.map(
+                (
+                  item, // Now using the imported navItems
+                ) => (
+                  <li key={item.label}>
+                    <Link
+                      href={item.href}
+                      onClick={() => setSidebarOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ),
+              )}
               {renderAuthControls()}
             </ul>
           </aside>
