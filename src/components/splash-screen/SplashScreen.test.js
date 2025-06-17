@@ -79,11 +79,46 @@ expected classes, as the component applies multiple classes via template string.
 /*
 Explanation block for SplashScreen.test.js unit tests:
 
-- **Mocks Next.js and CSS Modules:** Mocks next/image and 
-CSS modules so the test focuses on SplashScreen's logic and user-visible output.
-- **Tests User-Visible Output:** Asserts that the logo and brand text 
-are rendered, and that the transition class is applied after the timer.
-- **No Implementation Details:** Does not inspect internal 
-state or private methods, only the contract and visible output.
+- **Mocks Next.js and CSS Modules:** Mocks next/image and CSS modules
+  so the test focuses on SplashScreen's logic and user-visible output.
+- **Tests User-Visible Output:** Asserts that the logo and brand text are
+  rendered, and that the transition class is applied after the timer.
+- **No Implementation Details:** Does not inspect internal state or
+  private methods, only the contract and visible output.
 
+---------------------------------------------------------------------
+
+Additional Next.js/React Testing Tips:
+
+- **Mock Next.js Routing/Auth:** Mock `useRouter`, `useSession`, etc.,
+  at the top of the test file to control navigation and auth state.
+- **Server vs Client Components:** For server components, focus on props
+  and output. For client components, test interactivity and effects.
+- **Mock Browser APIs:** If components use `window` or `localStorage`,
+  mock these in your tests to avoid Node errors.
+- **Async Effects:** Use `await waitFor(...)` or wrap timer advances
+  in `act()` for effects that run asynchronously or after a delay.
+- **Snapshot Testing:** Use sparingly. Prefer explicit assertions about
+  visible output to avoid brittle tests.
+- **Accessibility Queries:** Use queries like `getByRole`,
+  `getByLabelText`, or `getByText` for robust, accessible tests.
+- **Avoid Implementation Details:** Only test what the user can see or
+  interact with, not internal state or private methods.
+- **Edge Cases:** Test empty, error, and loading states, and different
+  prop combinations for robust coverage.
+- **Consistent Mocking:** Mock CSS modules, images, and external
+  dependencies consistently across test files.
+- **Jest Config Hygiene:** Ensure `jest.config.js` has proper
+  `moduleNameMapper` for CSS, images, and static assets.
+
+// Example: Mock Next.js Router
+// jest.mock('next/router', () => ({
+//   useRouter: () => ({ push: jest.fn(), prefetch: jest.fn() })
+// }));
+
+// Example: Loading State
+// it('shows a spinner while loading', () => {
+//   render(<MyComponent loading />);
+//   expect(screen.getByRole('status')).toBeInTheDocument();
+// });
 */
