@@ -8,7 +8,6 @@ import styles from './Navbar.module.css';
 import Image from 'next/image';
 
 const navItems = [
-  // { label: 'Auth Test Page', href: '/authorization-test' },
   // { label: 'Sign Up', href: '#' },
 ];
 

@@ -3,18 +3,18 @@
 import '@testing-library/jest-dom';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Legal from './page';
+import Dashboard from './page';
 
 describe('Legal Page', () => {
   it('renders a heading with text "Legal"', () => {
-    render(<Legal />);
-    const heading = screen.getByRole('heading', { name: /legal/i });
+    render(<Dashboard />);
+    const heading = screen.getByRole('heading', { name: /dashboard/i });
     expect(heading).toBeInTheDocument();
   });
 
   it('renders a wrapping div', () => {
-    render(<Legal />);
-    const div = screen.getByText(/legal/i).closest('div');
+    render(<Dashboard />);
+    const div = screen.getByText(/dashboard/i).closest('div');
     expect(div).toBeInTheDocument();
   });
 });
