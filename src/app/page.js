@@ -1,5 +1,5 @@
-import React from 'react';
 ('use client');
+import React from 'react';
 import { useEffect } from 'react';
 import Button from '../components/Button/Button';
 import { useSession } from 'next-auth/react';
