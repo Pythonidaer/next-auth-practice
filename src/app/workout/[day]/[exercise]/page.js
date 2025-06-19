@@ -1,6 +1,6 @@
 import { dummyUserWorkoutData } from '@/data/dummyUserWorkoutData';
-import ExerciseCard from '@/components/ExerciseCard/ExerciseCard';
-import ExerciseActions from '@/components/ExerciseCard/ExerciseActions';
+import { ExerciseCard } from '@/components/ExerciseCard/ExerciseCard';
+import { ExerciseActions } from '@/components/ExerciseCard/ExerciseActions';
 import getFirstName from '@/utils/getFirstName';
 // import { useRouter } from 'next/navigation';
 // import { useSession } from 'next-auth/react';

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>components/ClientLayout.jsx - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="api_auth_%255B...module_nextauth%255D_route.html">nextauth]/route</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-components_ClientLayout.html">components/ClientLayout</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-components_ClientLayout.html#.ClientLayout">ClientLayout</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-components_ClientLayout.html#.useHydrated">useHydrated</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-components_ExerciseCard_ExerciseActions.html">components/ExerciseCard/ExerciseActions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-components_ExerciseCard_ExerciseActions.html#.ExerciseActions">ExerciseActions</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-components_ExerciseCard_ExerciseCard.html">components/ExerciseCard/ExerciseCard</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-components_ExerciseCard_ExerciseCard.html#.ExerciseCard">ExerciseCard</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-components_shared_Button_Button.html">components/shared/Button/Button</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-components_shared_Button_Button.html#.Button">Button</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-context_AuthProvider.html">context/AuthProvider</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-context_AuthProvider.html#.exports.AuthProvider">exports.AuthProvider</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-utils_getFirstName.html">utils/getFirstName</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-utils_getFirstName.html#.getFirstName">getFirstName</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">components/ClientLayout.jsx</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module components/ClientLayout
+ */
+'use client';
+import React from 'react';
+import { useEffect, useState } from 'react';
+import SplashScreen from './splash-screen/SplashScreen';
+import styles from '@/components/shared/AppTransition.module.css';
+
+/**
+ * Custom React hook that determines if the component has hydrated on the client side.
+ * Sets `hydrated` to true after the first client-side render, allowing conditional rendering
+ * based on hydration status (e.g., to avoid mismatches between server and client rendering).
+ *
+ * @memberof module:components/ClientLayout
+ * @returns {boolean} True if the component has hydrated on the client, false otherwise.
+ */
+function useHydrated() {
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+  return hydrated;
+}
+
+/**
+ * @function ClientLayout
+ * @component
+ * @memberof module:components/ClientLayout
+ * @description
+ *   A React layout component that waits until client-side hydration is complete
+ *   before rendering children. Displays a splash screen on first load for 3 seconds,
+ *   and avoids flickering or mismatches during SSR hydration. Uses sessionStorage
+ *   to remember if the splash screen has already been shown in the current session.
+ *
+ * @param {{ children: React.ReactNode }} props - The component's children to render
+ *   after hydration.
+ * @returns {JSX.Element} The wrapped layout with splash screen and content.
+ *
+ * @example
+ *   &lt;ClientLayout>
+ *     &lt;Dashboard />
+ *   &lt;/ClientLayout>
+ *
+ * @remarks
+ *   Avoids hydration mismatch issues in Next.js SSR by gating rendering behind a
+ *   hydration flag. Splash screen duration is set to 3 seconds and is controlled
+ *   via sessionStorage per session.
+ *
+ * @note This component must only be used in client-side context. Declared with
+ *   'use client' at the top.
+ */
+export default function ClientLayout({ children }) {
+  const hydrated = useHydrated();
+  const [showSplash, setShowSplash] = useState(true);
+  const splashDuration = 3000;
+
+  useEffect(() => {
+    if (!hydrated) return;
+    const splashAlreadyShown = window.sessionStorage.getItem('splashShown');
+    const timer = setTimeout(() => {
+      setShowSplash(false);
+      if (!splashAlreadyShown) {
+        window.sessionStorage.setItem('splashShown', 'true');
+      }
+    }, splashDuration);
+    return () => clearTimeout(timer);
+  }, [hydrated, splashDuration]); // Add splashDuration to dependency array
+
+  if (!hydrated) {
+    return (
+      &lt;div className={styles.splashWrapper}>
+        &lt;SplashScreen />
+      &lt;/div>
+    );
+  }
+
+  return (
+    &lt;>
+      &lt;div
+        data-testid="splash-container"
+        className={`${styles.splashWrapper} ${!showSplash ? styles.splashHidden : ''}`}
+      >
+        &lt;SplashScreen />
+      &lt;/div>
+      &lt;div
+        data-testid="children-container"
+        className={`${styles.pageWrapper} ${!showSplash ? styles.loaded : ''}`}
+      >
+        {children}
+      &lt;/div>
+    &lt;/>
+  );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.4</a> on Thu Jun 19 2025 15:16:33 GMT-0400 (Eastern Daylight Time) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

@@ -11,7 +11,7 @@ const compat = new FlatCompat({
 
 const config = [
   {
-    ignores: ['.next/', 'node_modules/', 'out/', 'public/', '.prettierrc'],
+    ignores: ['.next/', 'node_modules/', 'out/', 'public/', '.prettierrc', 'docs/'],
   },
   ...compat.extends('next/core-web-vitals'),
   ...compat.extends('plugin:prettier/recommended'),
@@ -19,7 +19,7 @@ const config = [
     rules: {
       'indent': ['error', 2], // 2 spaces
       'prettier/prettier': 'off',
-      'max-len': ['warn', { code: 80 }],
+      'max-len': ['warn', { code: 90 }],
       'quotes': ['error', 'single', { 'avoidEscape': true }],
       // independent code paths within a function -- might be off by 3
       'complexity': ['warn', { 'max': 8 }],

@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import ExerciseActions from './ExerciseActions';
+import { ExerciseActions } from './ExerciseActions';
 
 describe('ExerciseActions', () => {
   it('renders all action buttons with correct labels and icons', () => {

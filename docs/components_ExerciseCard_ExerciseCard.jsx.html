@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>components/ExerciseCard/ExerciseCard.jsx - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="api_auth_%255B...module_nextauth%255D_route.html">nextauth]/route</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-components_ClientLayout.html">components/ClientLayout</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-components_ClientLayout.html#.ClientLayout">ClientLayout</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-components_ClientLayout.html#.useHydrated">useHydrated</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-components_ExerciseCard_ExerciseActions.html">components/ExerciseCard/ExerciseActions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-components_ExerciseCard_ExerciseActions.html#.ExerciseActions">ExerciseActions</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-components_ExerciseCard_ExerciseCard.html">components/ExerciseCard/ExerciseCard</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-components_ExerciseCard_ExerciseCard.html#.ExerciseCard">ExerciseCard</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-components_shared_Button_Button.html">components/shared/Button/Button</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-components_shared_Button_Button.html#.Button">Button</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-context_AuthProvider.html">context/AuthProvider</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-context_AuthProvider.html#.exports.AuthProvider">exports.AuthProvider</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-utils_getFirstName.html">utils/getFirstName</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-utils_getFirstName.html#.getFirstName">getFirstName</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">components/ExerciseCard/ExerciseCard.jsx</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module components/ExerciseCard/ExerciseCard
+ */
+import React from 'react';
+import styles from './ExerciseCard.module.css';
+
+/**
+ * @typedef {Object} ExerciseCardProps
+ * @property {string} exerciseName - Name of the exercise
+ * @property {number} repCount - Number of repetitions
+ * @property {number} [warmupSetCount] - Number of warmup sets (optional)
+ * @property {number} workingSetsCount - Number of working sets
+ * @property {string} [exerciseDetails] - Additional details or notes (optional)
+ */
+
+/**
+ * Displays information about a specific exercise, including its name, rep count,
+ * warmup sets, working sets, and any additional details. Used in workout pages
+ * to present a summary of each exercise in a card format.
+ *
+ * @function ExerciseCard
+ * @memberof module:components/ExerciseCard/ExerciseCard
+ * @param {ExerciseCardProps} props - Props for ExerciseCard
+ * @returns {JSX.Element} The rendered exercise card
+ */
+export function ExerciseCard({
+  exerciseName,
+  repCount,
+  warmupSetCount,
+  workingSetsCount,
+  exerciseDetails,
+}) {
+  return (
+    &lt;div className={styles.card}>
+      &lt;h1 className={styles.exerciseName}>{exerciseName}&lt;/h1>
+      &lt;p className={styles.repCount}>{repCount} reps&lt;/p>
+      {warmupSetCount &amp;&amp; (
+        &lt;p className={styles.warmup}>{warmupSetCount} warmup&lt;/p>
+      )}
+      &lt;p className={styles.workingSets}>
+        {workingSetsCount} {warmupSetCount ? 'working sets' : 'sets'}
+      &lt;/p>
+      {exerciseDetails &amp;&amp; &lt;p className={styles.details}>{exerciseDetails}&lt;/p>}
+    &lt;/div>
+  );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.4</a> on Thu Jun 19 2025 15:16:33 GMT-0400 (Eastern Daylight Time) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

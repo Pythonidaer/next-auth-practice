@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import ExerciseCard from './ExerciseCard';
+import { ExerciseCard } from './ExerciseCard';
 
 describe('ExerciseCard', () => {
   it('renders exercise name, rep count, working sets, and details', () => {

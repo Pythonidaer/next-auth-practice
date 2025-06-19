@@ -9,7 +9,8 @@
     "lint": "next lint",
     "format": "prettier --write .",
     "prepare": "husky install",
-    "test:html": "npx jest --coverage && start ./jest-stare/index.html"
+    "test:html": "npx jest --coverage && start ./jest-stare/index.html",
+    "docs": "jsdoc -c jsdoc.json"
   },
   "dependencies": {
     "classnames": "^2.5.1",
@@ -35,8 +36,11 @@
     "jest": "^30.0.0",
     "jest-environment-jsdom": "^30.0.0",
     "jest-stare": "^2.5.2",
+    "jsdoc": "^4.0.4",
     "lint-staged": "^16.1.0",
-    "prettier": "^3.5.3"
+    "minami": "^1.2.3",
+    "prettier": "^3.5.3",
+    "taffydb": "^2.7.3"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

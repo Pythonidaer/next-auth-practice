@@ -8,27 +8,36 @@ import { render, screen } from '@testing-library/react';
 import RootLayout, { metadata } from './layout';
 
 // Mock child components
-jest.mock('../components/Navbar/Navbar', () => {
-  const MockNavbar = () => <nav data-testid="navbar" />;
-  MockNavbar.displayName = 'MockNavbar';
-  return MockNavbar;
-});
+jest.mock('../components/Navbar/Navbar', () => ({
+  __esModule: true,
+  default: () => {
+    const MockNavbar = () => <nav data-testid="navbar" />;
+    MockNavbar.displayName = 'MockNavbar';
+    return <MockNavbar />;
+  },
+}));
 
-jest.mock('./context/AuthProvider', () => {
-  const MockAuthProvider = ({ children }) => (
-    <div data-testid="auth-provider">{children}</div>
-  );
-  MockAuthProvider.displayName = 'MockAuthProvider';
-  return MockAuthProvider;
-});
+jest.mock('./context/AuthProvider', () => ({
+  __esModule: true,
+  AuthProvider: ({ children }) => {
+    const MockAuthProvider = ({ children }) => (
+      <div data-testid="auth-provider">{children}</div>
+    );
+    MockAuthProvider.displayName = 'MockAuthProvider';
+    return <MockAuthProvider>{children}</MockAuthProvider>;
+  },
+}));
 
-jest.mock('../components/ClientLayout', () => {
-  const MockClientLayout = ({ children }) => (
-    <div data-testid="client-layout">{children}</div>
-  );
-  MockClientLayout.displayName = 'MockClientLayout';
-  return MockClientLayout;
-});
+jest.mock('../components/ClientLayout', () => ({
+  __esModule: true,
+  default: ({ children }) => {
+    const MockClientLayout = ({ children }) => (
+      <div data-testid="client-layout">{children}</div>
+    );
+    MockClientLayout.displayName = 'MockClientLayout';
+    return <MockClientLayout>{children}</MockClientLayout>;
+  },
+}));
 
 // Mock next/font/google
 jest.mock('next/font/google', () => ({

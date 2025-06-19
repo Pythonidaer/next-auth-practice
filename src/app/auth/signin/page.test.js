@@ -18,18 +18,18 @@ jest.mock('next/image', () => {
   return MockImage;
 });
 
-jest.mock('../../../components/Button/Button.jsx', () => {
-  const MockButton = (props) => {
+jest.mock('../../../components/shared/Button/Button', () => ({
+  Button: (props) => {
     const { color, label, onClick } = props;
-    return (
+    const MockButton = () => (
       <button data-color={color} onClick={onClick}>
         {label}
       </button>
     );
-  };
-  MockButton.displayName = 'MockButton';
-  return MockButton;
-});
+    MockButton.displayName = 'MockButton';
+    return <MockButton {...props} />;
+  },
+}));
 
 describe('SignInPage', () => {
   beforeEach(() => {

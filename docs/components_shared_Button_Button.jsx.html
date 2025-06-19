@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>components/shared/Button/Button.jsx - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="api_auth_%255B...module_nextauth%255D_route.html">nextauth]/route</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-components_ClientLayout.html">components/ClientLayout</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-components_ClientLayout.html#.ClientLayout">ClientLayout</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-components_ClientLayout.html#.useHydrated">useHydrated</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-components_ExerciseCard_ExerciseActions.html">components/ExerciseCard/ExerciseActions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-components_ExerciseCard_ExerciseActions.html#.ExerciseActions">ExerciseActions</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-components_ExerciseCard_ExerciseCard.html">components/ExerciseCard/ExerciseCard</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-components_ExerciseCard_ExerciseCard.html#.ExerciseCard">ExerciseCard</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-components_shared_Button_Button.html">components/shared/Button/Button</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-components_shared_Button_Button.html#.Button">Button</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-context_AuthProvider.html">context/AuthProvider</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-context_AuthProvider.html#.exports.AuthProvider">exports.AuthProvider</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-utils_getFirstName.html">utils/getFirstName</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-utils_getFirstName.html#.getFirstName">getFirstName</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">components/shared/Button/Button.jsx</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module components/shared/Button/Button
+ */
+import React from 'react';
+import styles from './Button.module.css';
+import classNames from 'classnames'; // optional but helpful
+import { ReactNode } from 'react';
+
+/**
+ * @typedef {Object} ButtonProps
+ * @property {'red'|'green'|'white'|'blue'} [color='blue'] - Button color variant
+ * @property {string} label - Button text label
+ * @property {*} [icon=null] - Optional icon
+ * @property {function} onClick - Click handler function
+ * @property {'button'|'submit'|'reset'} [type='button'] - Button type attribute
+ */
+
+/**
+ * Button component for reusable UI actions.
+ *
+ * @function Button
+ * @memberof module:components/shared/Button/Button
+ * @param {ButtonProps} props - Button props
+ * @returns {JSX.Element} The rendered button component
+ */
+export function Button({
+  color = 'blue', // red | green | white | blue
+  label,
+  icon = null,
+  onClick,
+  type = 'button',
+}) {
+  return (
+    &lt;button
+      type={type}
+      className={classNames(styles.button, styles[color])}
+      onClick={onClick}
+    >
+      {icon &amp;&amp; &lt;span className={styles.icon}>{icon}&lt;/span>}
+      &lt;span>{label}&lt;/span>
+    &lt;/button>
+  );
+}
+
+/**
+ * Why use @typedef and @property?
+ *
+ * JSDoc only displays individual props in the sidebar and method/property tables if you define a named object type (using @typedef and @property) and reference it in your component's @param tag. This approach improves documentation clarity for consumers of your component, making each prop visible and clearly described in the generated docs.
+ */
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.4</a> on Thu Jun 19 2025 15:16:33 GMT-0400 (Eastern Daylight Time) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

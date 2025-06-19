@@ -1,6 +1,6 @@
 import React from 'react';
 import './globals.css';
-import AuthProvider from './context/AuthProvider';
+import { AuthProvider } from './context/AuthProvider';
 import Navbar from '../components/Navbar/Navbar';
 import ClientLayout from '../components/ClientLayout'; // <-- new
 import { League_Spartan } from 'next/font/google';

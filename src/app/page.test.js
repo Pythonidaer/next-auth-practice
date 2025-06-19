@@ -14,13 +14,12 @@ jest.mock('next-auth/react', () => ({
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
-jest.mock('../components/Button/Button', () => {
-  const MockButton = ({ label, onClick }) => (
-    <button onClick={onClick}>{label}</button>
-  );
-  MockButton.displayName = 'MockButton';
-  return MockButton;
-});
+jest.mock('../components/shared/Button/Button', () => ({
+  Button: ({ label, onClick }) => {
+    // Inline mock, avoid referencing out-of-scope variables
+    return <button onClick={onClick}>{label}</button>;
+  },
+}));
 
 jest.mock('../utils/getFirstName', () => jest.fn(() => 'Test'));
 

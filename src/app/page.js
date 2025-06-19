@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { useEffect } from 'react';
-import Button from '../components/Button/Button';
+import { Button } from '../components/shared/Button/Button';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import getFirstName from '../utils/getFirstName';

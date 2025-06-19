@@ -1,0 +1,11 @@
+{
+  "source": {
+    "include": ["src"],
+    "exclude": ["node_modules", "coverage"]
+  },
+  "opts": {
+    "destination": "./docs",
+    "recurse": true,
+    "template": "node_modules/minami"
+  }
+}
