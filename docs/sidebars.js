@@ -32,7 +32,16 @@ const sidebars = {
   docs: [
     'intro',
     'getting-started',
-    'architecture', // general architecture overview if you have one
+    {
+      type: 'category',
+      label: 'System Architecture',
+      items: [
+        'system-architecture/overview',
+        'system-architecture/requirements',
+        'system-architecture/project-spec',
+        'system-architecture/domain-model',
+      ],
+    },
     {
       type: 'category',
       label: 'Architecture Decisions (ADRs)',
@@ -57,17 +66,6 @@ const sidebars = {
         'adr/typescript',
       ],
     },
-    // {
-    //   type: 'category',
-    //   label: 'Architecture (C4)',
-    //   collapsed: true,
-    //   items: [
-    //     'architecture/system-context',
-    //     'architecture/containers',
-    //     'architecture/components',
-    //     'architecture/code',
-    //   ],
-    // },
     {
       type: 'category',
       label: 'Guides',

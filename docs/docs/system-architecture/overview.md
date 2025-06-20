@@ -32,17 +32,22 @@ This document outlines the architecture of the Meatbag fitness application MVP.
 
 ## 3. Architectural Decisions
 
-| Decision             | Reason                                                      |
-| -------------------- | ----------------------------------------------------------- |
-| **Next.js**          | Handles routing, SSR, and fullstack needs                   |
-| **React**            | Component reusability, ecosystem, DX                        |
-| **NextAuth.js**      | Built-in Google auth + future credential/magic-link support |
-| **PostgreSQL**       | Relational DB for structured user/workout data              |
-| **Prisma (planned)** | ORM to interface with PostgreSQL                            |
-| **Vercel**           | Seamless hosting, CI/CD, and team collaboration             |
-| **Docusaurus**       | Lightweight documentation site with good DX                 |
-| **Jest**             | Compatible with Next.js for unit testing                    |
-| **Monorepo**         | Keeps app and documentation in one Git project              |
+| Decision/Tool            | Reason / Notes                                                                                          |
+| ------------------------ | ------------------------------------------------------------------------------------------------------- |
+| **Next.js**              | App framework: routing, SSR, App Router, React Server Components, API routes, fullstack capabilities    |
+| **React**                | UI library: component model, hooks, ecosystem, supports Server/Client Components                        |
+| **NextAuth.js**          | Auth: Google OAuth, future credential/magic-link, Prisma adapter, RSC compatible                        |
+| **PostgreSQL**           | Relational DB: structured user/workout data, supported by Prisma/NextAuth, scalable, open source        |
+| **Prisma (planned)**     | ORM: schema-first, type-safe queries, migrations, Next.js/NextAuth integration, planned post-MVP        |
+| **Vercel**               | Hosting/CI/CD: zero-config, monorepo-aware, preview deployments, GitHub integration                     |
+| **Docusaurus**           | Docs: Markdown-based, sidebar nav, versioning, easy DX, monorepo deploy, future Typedoc integration     |
+| **Jest**                 | Unit testing: Next.js/React compatible, co-located tests, React Testing Library, 85%+ aspirational cov. |
+| **ESLint + Prettier**    | Linting/Formatting: JS/React code quality, Prettier for style, Husky/lint-staged for pre-commit         |
+| **Stylelint (planned)**  | CSS linting: global and module CSS, planned for CI/CD and commit checks                                 |
+| **Monorepo**             | Structure: app and docs in one repo, unified tooling, easier refactoring, future Nx/Turborepo possible  |
+| **Storybook (deferred)** | UI docs: not used for MVP—manual docs in Docusaurus, revisit post-MVP                                   |
+| **Windsurf (future)**    | Workflow automation: rule-based code consistency, naming, auto-tasks, proposed for post-MVP             |
+| **TypeScript (future)**  | Type safety: planned incremental adoption post-MVP, Typedoc for API docs, improves maintainability      |
 
 ---
 
