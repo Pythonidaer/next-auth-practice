@@ -40,6 +40,7 @@ const sidebars = {
         'system-architecture/requirements',
         'system-architecture/project-spec',
         'system-architecture/domain-model',
+        'system-architecture/erd-diagram',
       ],
     },
     {
@@ -70,7 +71,7 @@ const sidebars = {
       type: 'category',
       label: 'Guides',
       collapsed: true,
-      items: ['guides/testing', 'guides/deploying', 'guides/data-modeling'],
+      items: ['guides/setup-and-development', 'guides/routes-and-modules'],
     },
     {
       type: 'category',
@@ -82,7 +83,7 @@ const sidebars = {
       type: 'category',
       label: 'API',
       collapsed: true,
-      items: ['api/auth', 'api/routes', 'api/utils'],
+      items: ['api/overview', 'api/auth', 'api/routes', 'api/utils'],
     },
     {
       type: 'category',

@@ -3,12 +3,15 @@
 ## Entities
 
 - `User`
-- `WorkoutPlan`
+- `WorkoutProgram`
 - `WorkoutGroup`
 - `WorkoutDay`
 - `Exercise`
 - `ExerciseCompletion`
+- `WorkoutDayCompletion`
+- `WorkoutGroupCompletion`
 - `WorkoutAssignment`
+- `UserWorkoutStats`
 
 ---
 
@@ -16,82 +19,102 @@
 
 ### `User`
 
-- `id`: string
+- `id`: string (Primary Key)
 - `name`: string
-- `email`: string
-- `authProvider`: enum (`google`)
+- `email`: string (Unique)
+- `authProvider`: enum (`google`, ...)
 - `createdAt`: datetime
 - `updatedAt`: datetime
 
 **Operations**
 
-- `createWorkoutPlan()`
-- `getWorkoutPlan(id)`
-- `sendWorkoutPlan(toUserId, planId)`
-- `completeExercise(exerciseId, data)`
+- `createWorkoutProgram()`
+- `getWorkoutProgram(id)`
+- `assignWorkoutProgram(toUserIds[])`
+- `markExerciseAsComplete(exerciseId, notes)`
 - `viewDashboard()`
 - `getAllUsers()`
 - `updateProfile(details)`
+- `signOut()`
 
 ---
 
-### `WorkoutPlan`
+### `WorkoutProgram`
 
-- `id`: string
+- `id`: string (Primary Key)
 - `title`: string
-- `description`: string
-- `createdBy`: User
-- `visibility`: enum (`private`, `shared`)
+- `description`: string (optional)
+- `createdByUserId`: string (Foreign Key to `User.id`)
 - `createdAt`: datetime
 - `updatedAt`: datetime
+
+**Relationships**
+
+- One `WorkoutProgram` has many `WorkoutGroup`s.
 
 **Operations**
 
 - `addWorkoutGroup()`
-- `shareWith(userId)`
-- `clonePlan()`
+- `cloneProgram()`
+- `previewProgram()`
+- `assignToUsers(userIds[])`
+- `edit()`
+- `delete()`
 
 ---
 
 ### `WorkoutGroup`
 
-- `id`: string
-- `planId`: WorkoutPlan
-- `order`: number
-- `title`: string (optional, e.g. “Week 1”)
+- `id`: string (Primary Key)
+- `programId`: string (Foreign Key to `WorkoutProgram.id`)
+- `order`: number (Determines position within the program)
+- `title`: string (optional, e.g., “Week 1”, "Phase A")
 - `createdAt`: datetime
+
+**Relationships**
+
+- One `WorkoutGroup` has exactly 7 `WorkoutDay`s.
 
 **Operations**
 
 - `reorderWorkoutDays(order[])`
 - `getNextWorkoutDay(currentDayId)`
+- `edit()`
+- `delete()`
 
 ---
 
 ### `WorkoutDay`
 
-- `id`: string
-- `groupId`: WorkoutGroup
-- `order`: number
+- `id`: string (Primary Key)
+- `groupId`: string (Foreign Key to `WorkoutGroup.id`)
+- `order`: number (Determines position within the group, 1-7)
 - `isRestDay`: boolean
 - `createdAt`: datetime
+
+**Relationships**
+
+- One `WorkoutDay` has many `Exercise`s (0-N).
 
 **Operations**
 
 - `addExercise()`
 - `removeExercise(exerciseId)`
 - `reorderExercises(order[])`
+- `edit()`
 
 ---
 
 ### `Exercise`
 
-- `id`: string
-- `dayId`: WorkoutDay
+- `id`: string (Primary Key)
+- `dayId`: string (Foreign Key to `WorkoutDay.id`)
 - `name`: string
 - `notes`: string
-- `targetReps`: number
-- `targetSets`: number
+- `targetWarmupSets`: number
+- `targetWorkingSets`: number
+- `targetReps`: string (e.g., "8-10 reps", "20 reps")
+- `order`: number
 - `createdAt`: datetime
 
 **Operations**
@@ -103,31 +126,78 @@
 
 ### `ExerciseCompletion`
 
-- `id`: string
-- `exerciseId`: Exercise
-- `userId`: User
-- `weights`: array of numbers
-- `reps`: array of numbers
-- `notes`: string
+- `id`: string (Primary Key)
+- `exerciseId`: string (Foreign Key to `Exercise.id`)
+- `userId`: string (Foreign Key to `User.id`)
+- `workoutDayId`: string (Foreign Key to `WorkoutDay.id`)
+- `programId`: string (Foreign Key to `WorkoutProgram.id`)
 - `completedAt`: datetime
+- `userNotes`: string (optional)
 
 **Operations**
 
 - `submitCompletion()`
-- `editCompletion()`
 - `undoCompletion()`
+
+---
+
+### `WorkoutDayCompletion`
+
+- `id`: string (Primary Key)
+- `dayId`: string (Foreign Key to `WorkoutDay.id`)
+- `userId`: string (Foreign Key to `User.id`)
+- `workoutGroupId`: string (Foreign Key to `WorkoutGroup.id`)
+- `programId`: string (Foreign Key to `WorkoutProgram.id`)
+- `completedAt`: datetime
+
+**Operations**
+
+- (Managed by system logic based on `ExerciseCompletion` and `isRestDay`)
+
+---
+
+### `WorkoutGroupCompletion`
+
+- `id`: string (Primary Key)
+- `groupId`: string (Foreign Key to `WorkoutGroup.id`)
+- `userId`: string (Foreign Key to `User.id`)
+- `programId`: string (Foreign Key to `WorkoutProgram.id`)
+- `completedAt`: datetime
+
+**Operations**
+
+- (Managed by system logic based on `WorkoutDayCompletion`)
 
 ---
 
 ### `WorkoutAssignment`
 
-- `id`: string
-- `senderId`: User
-- `recipientId`: User
-- `planId`: WorkoutPlan
+- `id`: string (Primary Key)
+- `senderId`: string (Foreign Key to `User.id`)
+- `recipientId`: string (Foreign Key to `User.id`)
+- `programId`: string (Foreign Key to `WorkoutProgram.id`)
 - `assignedAt`: datetime
+- `isActive`: boolean
 
 **Operations**
 
-- `assignPlanToUser(userId)`
-- `trackAssignmentProgress()`
+- `assignProgramToUser()`
+- `unassignProgram()`
+
+---
+
+### `UserWorkoutStats`
+
+- `id`: string (Primary Key)
+- `userId`: string (Foreign Key to `User.id`)
+- `programId`: string (Foreign Key to `WorkoutProgram.id`)
+- `completedDayCount`: number
+- `lastCompletedDayId`: string (Foreign Key to `WorkoutDay.id`, or null)
+- `lastCompletedAt`: datetime
+- `programStartDate`: datetime
+
+**Operations**
+
+- `getExerciseHistory(exerciseId, userId)`
+- `computeProgress()`
+- `viewSummary()`
