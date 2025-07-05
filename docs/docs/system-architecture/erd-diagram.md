@@ -75,7 +75,7 @@ The ERD below represents the core building blocks of the Meatbag workout plannin
 
 ---
 
-## ERD Diagram (Mermaid Syntax)
+## ERD Diagram
 
 ```mermaid
 erDiagram
