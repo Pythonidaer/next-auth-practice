@@ -43,7 +43,7 @@ The test suite in `src/utils/getFirstName.test.js` covers the following scenario
 
 ## Testing Best Practices Applied
 
-This test suite demonstrates several best practices from our [Unit Testing Best Practices](../../UNIT_TESTING_BEST_PRACTICES.md) document:
+This test suite demonstrates several best practices from our Unit Testing Best Practices document:
 
 1. **Comprehensive Input Coverage**: Tests include typical cases, edge cases, and invalid inputs
 2. **Focused Test Cases**: Each test case has a clear, specific purpose with descriptive names
