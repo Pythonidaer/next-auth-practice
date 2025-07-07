@@ -41,6 +41,7 @@ const sidebars = {
         'system-architecture/project-spec',
         'system-architecture/domain-model',
         'system-architecture/erd-diagram',
+        'system-architecture/high-level-design',
       ],
     },
     {
@@ -85,12 +86,12 @@ const sidebars = {
         'guides/stats-dashboard-state-diagram',
       ],
     },
-    {
-      type: 'category',
-      label: 'Features',
-      collapsed: true,
-      items: ['features/auth', 'features/dashboard', 'features/workouts'],
-    },
+    // {
+    //   type: 'category',
+    //   label: 'Features',
+    //   collapsed: true,
+    //   items: ['features/auth', 'features/dashboard', 'features/workouts'],
+    // },
     {
       type: 'category',
       label: 'API',
@@ -107,14 +108,44 @@ const sidebars = {
       type: 'category',
       label: 'Tests',
       collapsed: true,
-      items: ['tests/strategy', 'tests/coverage', 'tests/examples'],
+      items: [
+        'tests/coverage',
+        'tests/getFirstName-tests',
+        {
+          type: 'category',
+          label: 'Components',
+          collapsed: true,
+          items: [
+            'tests/components/ClientLayout-tests',
+            'tests/components/Button-tests',
+            'tests/components/ExerciseActions-tests',
+            'tests/components/ExerciseCard-tests',
+            'tests/components/Navbar-tests',
+            'tests/components/SplashScreen-tests',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'App',
+          collapsed: true,
+          items: [
+            'tests/app/page-tests',
+            'tests/app/layout-tests',
+            'tests/app/page-routes-tests',
+            'tests/app/workout-route-tests',
+            'tests/app/context-tests',
+            'tests/app/signin-tests',
+            'tests/app/nextauth-api-tests',
+          ],
+        },
+      ],
     },
-    {
-      type: 'category',
-      label: 'Reference',
-      collapsed: true,
-      items: ['reference/components', 'reference/hooks', 'reference/context'],
-    },
+    // {
+    //   type: 'category',
+    //   label: 'Reference',
+    //   collapsed: true,
+    //   items: ['reference/components', 'reference/hooks', 'reference/context'],
+    // },
   ],
 };
 
