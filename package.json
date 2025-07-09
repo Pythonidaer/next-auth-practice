@@ -12,6 +12,8 @@
     "test:html": "npx jest --coverage && start ./jest-stare/index.html"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.10.0",
+    "@prisma/client": "^6.11.1",
     "classnames": "^2.5.1",
     "next": "15.3.3",
     "next-auth": "^4.24.11",
@@ -36,7 +38,8 @@
     "jest-environment-jsdom": "^30.0.0",
     "jest-stare": "^2.5.2",
     "lint-staged": "^16.1.0",
-    "prettier": "^3.5.3"
+    "prettier": "^3.5.3",
+    "prisma": "^6.11.1"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

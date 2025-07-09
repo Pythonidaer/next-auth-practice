@@ -17,6 +17,9 @@ page copy.js
 /coverage
 /jest-stare
 
+# Windsurf
+WINDSURF_RULES.md
+
 # source code below ! essential for version control, collaboration, CI/CD, and documentation - don't ignore!
 # **/*.test.*
 # **/*.spec.*
@@ -47,3 +50,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/src/generated/prisma
