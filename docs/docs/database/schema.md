@@ -6,43 +6,122 @@ This document outlines the PostgreSQL database schema for the Meatbag applicatio
 
 - [Schema Overview](#schema-overview)
 - [Table Definitions](#table-definitions)
-  - [Users Table](#users-table)
-  - [WorkoutPrograms Table](#workoutprograms-table)
-  - [WorkoutGroups Table](#workoutgroups-table)
-  - [WorkoutDays Table](#workoutdays-table)
-  - [Exercises Table](#exercises-table)
-  - [ExerciseCompletions Table](#exercisecompletions-table)
-  - [WorkoutDayCompletions Table](#workoutdaycompletions-table)
-  - [WorkoutGroupCompletions Table](#workoutgroupcompletions-table)
-  - [WorkoutAssignments Table](#workoutassignments-table)
-  - [UserWorkoutStats Table](#userworkoutstats-table)
+  - [Authentication Tables (NextAuth)](#authentication-tables-nextauth)
+    - [Users Table](#users-table)
+    - [Accounts Table](#accounts-table)
+    - [Sessions Table](#sessions-table)
+    - [VerificationTokens Table](#verificationtokens-table)
+  - [Application Tables](#application-tables)
+    - [WorkoutPrograms Table](#workoutprograms-table)
+    - [WorkoutGroups Table](#workoutgroups-table)
+    - [WorkoutDays Table](#workoutdays-table)
+    - [Exercises Table](#exercises-table)
+    - [ExerciseCompletions Table](#exercisecompletions-table)
+    - [WorkoutDayCompletions Table](#workoutdaycompletions-table)
+    - [WorkoutGroupCompletions Table](#workoutgroupcompletions-table)
+    - [WorkoutAssignments Table](#workoutassignments-table)
+    - [UserWorkoutStats Table](#userworkoutstats-table)
 
 ---
 
 ## 1. Schema Overview
 
-The database schema is designed to support the core functionalities of creating, managing, tracking, and sharing workout programs. Relationships are established using foreign keys to ensure data integrity.
+The database schema is designed to support two main components:
+
+1. **Authentication**: Tables managed by NextAuth.js for user authentication and session management
+2. **Application**: Tables supporting the core functionalities of creating, managing, tracking, and sharing workout programs
+
+Relationships are established using foreign keys to ensure data integrity across both components.
 
 ---
 
 ## 2. Table Definitions
 
-### Users Table
+### Authentication Tables (NextAuth)
+
+These tables are created and managed by NextAuth.js through the Prisma adapter.
+
+#### Users Table
 
 Stores information about the application's users.
 
 ```sql
 CREATE TABLE users (
     id VARCHAR(255) PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    name VARCHAR(255), -- NULLABLE
     email VARCHAR(255) UNIQUE NOT NULL,
-    auth_provider VARCHAR(50) NOT NULL, -- e.g., 'google'
+    email_verified TIMESTAMP WITH TIME ZONE, -- NULLABLE
+    image VARCHAR(255), -- NULLABLE, profile image URL
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 ```
 
-### WorkoutPrograms Table
+#### Accounts Table
+
+Links users to OAuth providers for authentication.
+
+```sql
+CREATE TABLE accounts (
+    provider VARCHAR(255) NOT NULL,
+    provider_account_id VARCHAR(255) NOT NULL,
+    user_id VARCHAR(255) NOT NULL,
+    type VARCHAR(255) NOT NULL,
+    refresh_token TEXT, -- NULLABLE
+    access_token TEXT, -- NULLABLE
+    expires_at INT, -- NULLABLE
+    token_type VARCHAR(255), -- NULLABLE
+    scope VARCHAR(255), -- NULLABLE
+    id_token TEXT, -- NULLABLE
+    session_state VARCHAR(255), -- NULLABLE
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+
+    PRIMARY KEY (provider, provider_account_id),
+
+    CONSTRAINT fk_account_user
+        FOREIGN KEY (user_id)
+        REFERENCES users (id)
+        ON DELETE CASCADE
+);
+```
+
+#### Sessions Table
+
+Stores active user sessions.
+
+```sql
+CREATE TABLE sessions (
+    session_token VARCHAR(255) PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL,
+    expires TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+
+    CONSTRAINT fk_session_user
+        FOREIGN KEY (user_id)
+        REFERENCES users (id)
+        ON DELETE CASCADE
+);
+```
+
+#### VerificationTokens Table
+
+Stores tokens for email verification and password reset.
+
+```sql
+CREATE TABLE verification_tokens (
+    identifier VARCHAR(255) NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    expires TIMESTAMP WITH TIME ZONE NOT NULL,
+
+    PRIMARY KEY (identifier, token)
+);
+```
+
+### Application Tables
+
+#### WorkoutPrograms Table
 
 Stores details of workout programs created by users.
 
@@ -62,7 +141,7 @@ CREATE TABLE workout_programs (
 );
 ```
 
-### WorkoutGroups Table
+#### WorkoutGroups Table
 
 Organizes workout days within a program (e.g., "Week 1").
 
@@ -81,7 +160,7 @@ CREATE TABLE workout_groups (
 );
 ```
 
-### WorkoutDays Table
+#### WorkoutDays Table
 
 Represents a single day within a workout group, potentially a rest day or containing exercises.
 
@@ -100,7 +179,7 @@ CREATE TABLE workout_days (
 );
 ```
 
-### Exercises Table
+#### Exercises Table
 
 Details for individual exercises within a workout day.
 
@@ -123,7 +202,7 @@ CREATE TABLE exercises (
 );
 ```
 
-### ExerciseCompletions Table
+#### ExerciseCompletions Table
 
 Records a user's completion of a specific exercise. Simplified for MVP.
 
@@ -158,7 +237,7 @@ CREATE TABLE exercise_completions (
 );
 ```
 
-### WorkoutDayCompletions Table
+#### WorkoutDayCompletions Table
 
 Records when a user completes an entire workout day (implicitly triggered).
 
@@ -191,7 +270,7 @@ CREATE TABLE workout_day_completions (
 );
 ```
 
-### WorkoutGroupCompletions Table
+#### WorkoutGroupCompletions Table
 
 Records when a user completes an entire workout group (implicitly triggered).
 
@@ -219,7 +298,7 @@ CREATE TABLE workout_group_completions (
 );
 ```
 
-### WorkoutAssignments Table
+#### WorkoutAssignments Table
 
 Records which workout programs have been assigned from one user to another.
 
@@ -248,7 +327,7 @@ CREATE TABLE workout_assignments (
 );
 ```
 
-### UserWorkoutStats Table
+#### UserWorkoutStats Table
 
 Aggregates high-level statistics for a user's progress within a specific program.
 

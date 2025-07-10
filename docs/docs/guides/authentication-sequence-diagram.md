@@ -333,6 +333,103 @@ sequenceDiagram
 - Consider implementing CSRF protection for authentication endpoints.
 - Session refresh should happen automatically before the session expires.
 
+### Database Schema for Authentication
+
+The authentication sequence relies on these Prisma models:
+
+1. **User Model**
+
+   ```prisma
+   model User {
+     id                     String    @id @default(uuid())
+     name                   String?
+     email                  String    @unique
+     emailVerified          DateTime?
+     image                  String?
+     accounts               Account[]
+     sessions               Session[]
+
+     // Application-specific fields
+     createdAt              DateTime  @default(now()) @map("created_at")
+     updatedAt              DateTime  @default(now()) @map("updated_at")
+     workoutPrograms        WorkoutProgram[]
+     // ... other relations
+
+     @@map("users")
+   }
+   ```
+
+   This model stores the core user information and is created/updated during steps 12-13 in the sequence diagram.
+
+2. **Account Model**
+
+   ```prisma
+   model Account {
+     userId            String
+     type              String
+     provider          String
+     providerAccountId String
+     refresh_token     String?
+     access_token      String?
+     expires_at        Int?
+     token_type        String?
+     scope             String?
+     id_token          String?
+     session_state     String?
+
+     createdAt DateTime @default(now())
+     updatedAt DateTime @updatedAt
+
+     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+     @@id([provider, providerAccountId])
+     @@map("accounts")
+   }
+   ```
+
+   This model links users to their OAuth providers and stores tokens received in step 9. It's created during step 12 for new users.
+
+3. **Session Model**
+
+   ```prisma
+   model Session {
+     sessionToken String   @unique
+     userId       String
+     expires      DateTime
+
+     createdAt DateTime @default(now())
+     updatedAt DateTime @updatedAt
+
+     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+     @@map("sessions")
+   }
+   ```
+
+   This model stores active sessions and is created in step 14, updated in step 29, and deleted in step 34.
+
+4. **VerificationToken Model**
+
+   ```prisma
+   model VerificationToken {
+     identifier String
+     token      String
+     expires    DateTime
+
+     @@id([identifier, token])
+     @@map("verification_tokens")
+   }
+   ```
+
+   This model supports email verification flows (not shown in the main sequence for simplicity).
+
+The session data accessible in the frontend (as seen in `src/app/page.js`) includes:
+
+- `session.user.name` - User's display name from the OAuth provider
+- `session.user.email` - User's email address
+- `session.user.image` - User's profile image URL
+- `session.userId` - Database ID of the user (from the User model)
+
 ---
 
 ## Usage Guidance

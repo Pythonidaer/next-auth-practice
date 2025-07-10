@@ -192,6 +192,74 @@ stateDiagram-v2
 - Token refresh can be implemented using the NextAuth.js refresh token rotation feature.
 - The application should handle edge cases like network disconnection during authentication.
 
+### Database Models Supporting Authentication States
+
+The following Prisma models support the authentication state management:
+
+1. **User Model** - Stores core user information:
+
+   ```prisma
+   model User {
+     id            String    @id @default(uuid())
+     name          String?
+     email         String    @unique
+     emailVerified DateTime?
+     image         String?
+     accounts      Account[]
+     sessions      Session[]
+     // Application-specific fields...
+   }
+   ```
+
+2. **Account Model** - Links users to OAuth providers (supports the Authenticating state):
+
+   ```prisma
+   model Account {
+     userId            String
+     type              String
+     provider          String
+     providerAccountId String
+     refresh_token     String?  // Enables token refresh transitions
+     access_token      String?
+     expires_at        Int?     // Determines token expiration
+     // Other OAuth fields...
+
+     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+     @@id([provider, providerAccountId])
+   }
+   ```
+
+3. **Session Model** - Manages active sessions (supports the Authenticated state):
+
+   ```prisma
+   model Session {
+     sessionToken String   @unique
+     userId       String
+     expires      DateTime  // Controls Session Expired transitions
+
+     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+   }
+   ```
+
+4. **VerificationToken Model** - Handles email verification (part of the Authenticating state):
+   ```prisma
+   model VerificationToken {
+     identifier String
+     token      String
+     expires    DateTime
+
+     @@id([identifier, token])
+   }
+   ```
+
+These models directly map to the authentication states in the diagram:
+
+- The existence of a valid Session record corresponds to the Authenticated state
+- Expired Session records trigger the Session Expired state
+- Account records facilitate OAuth authentication transitions
+- VerificationToken records support email verification flows
+
 ---
 
 ## Usage

@@ -18,14 +18,15 @@ Each section below details a specific table (model) in the PostgreSQL database.
 
 **Table Name:** `users`
 
-**Purpose:** Stores user authentication and profile information.
+**Purpose:** Stores user authentication and profile information. Integrated with NextAuth.js.
 
 **Columns:**
 
-- `id` (VARCHAR(255)): Primary Key. Unique identifier for the user.
-- `name` (VARCHAR(255)): The user's display name. Not nullable.
+- `id` (VARCHAR(255)): Primary Key. Unique identifier for the user. Generated as UUID.
+- `name` (VARCHAR(255)): The user's display name. Nullable.
 - `email` (VARCHAR(255)): The user's email address. Unique and not nullable, used for identification and communication.
-- `auth_provider` (VARCHAR(50)): The authentication provider used (e.g., 'google'). Not nullable.
+- `emailVerified` (TIMESTAMP WITH TIME ZONE): When the user's email was verified. Nullable.
+- `image` (VARCHAR(255)): URL to the user's profile image. Nullable.
 - `created_at` (TIMESTAMP WITH TIME ZONE): Timestamp of when the user record was created. Defaults to current timestamp.
 - `updated_at` (TIMESTAMP WITH TIME ZONE): Timestamp of the last update to the user record. Defaults to current timestamp.
 
@@ -35,6 +36,8 @@ Each section below details a specific table (model) in the PostgreSQL database.
 - One-to-Many: A users record can be associated with many exercise_completions, workout_day_completions, and workout_group_completions.
 - One-to-Many: A users record can be a sender or recipient in many workout_assignments.
 - One-to-One: A users record has one user_workout_stats record per workout program they are following (represented as a unique constraint on user_id and program_id in user_workout_stats).
+- One-to-Many: A users record is linked to many accounts (OAuth providers).
+- One-to-Many: A users record can have many sessions.
 
 **Indexes:**
 
@@ -42,7 +45,83 @@ Each section below details a specific table (model) in the PostgreSQL database.
 
 ---
 
-### 2.2. WorkoutPrograms
+### 2.2. Accounts
+
+**Table Name:** `accounts`
+
+**Purpose:** Links users to OAuth providers for authentication. Created and managed by NextAuth.js.
+
+**Columns:**
+
+- `userId` (VARCHAR(255)): Foreign Key referencing users.id. Not nullable.
+- `type` (VARCHAR(255)): The type of account (e.g., 'oauth'). Not nullable.
+- `provider` (VARCHAR(255)): The OAuth provider (e.g., 'google'). Not nullable.
+- `providerAccountId` (VARCHAR(255)): The unique ID from the provider. Not nullable.
+- `refresh_token` (TEXT): OAuth refresh token. Nullable.
+- `access_token` (TEXT): OAuth access token. Nullable.
+- `expires_at` (INT): Token expiration timestamp. Nullable.
+- `token_type` (VARCHAR(255)): Type of token (e.g., 'bearer'). Nullable.
+- `scope` (VARCHAR(255)): OAuth scopes granted. Nullable.
+- `id_token` (TEXT): OAuth ID token (JWT). Nullable.
+- `session_state` (VARCHAR(255)): Session state for some providers. Nullable.
+- `createdAt` (TIMESTAMP WITH TIME ZONE): Timestamp of account creation. Defaults to current timestamp.
+- `updatedAt` (TIMESTAMP WITH TIME ZONE): Timestamp of last update. Defaults to current timestamp.
+
+**Relationships:**
+
+- Many-to-One: Belongs to one user.
+
+**Indexes:**
+
+- Composite Primary Key on (provider, providerAccountId)
+- Index on userId
+
+---
+
+### 2.3. Sessions
+
+**Table Name:** `sessions`
+
+**Purpose:** Stores active user sessions. Created and managed by NextAuth.js.
+
+**Columns:**
+
+- `sessionToken` (VARCHAR(255)): Primary Key. Unique session identifier.
+- `userId` (VARCHAR(255)): Foreign Key referencing users.id. Not nullable.
+- `expires` (TIMESTAMP WITH TIME ZONE): When the session expires. Not nullable.
+- `createdAt` (TIMESTAMP WITH TIME ZONE): Timestamp of session creation. Defaults to current timestamp.
+- `updatedAt` (TIMESTAMP WITH TIME ZONE): Timestamp of last update. Defaults to current timestamp.
+
+**Relationships:**
+
+- Many-to-One: Belongs to one user.
+
+**Indexes:**
+
+- Unique index on sessionToken
+- Index on userId
+
+---
+
+### 2.4. VerificationTokens
+
+**Table Name:** `verification_tokens`
+
+**Purpose:** Stores tokens for email verification and password reset. Created and managed by NextAuth.js.
+
+**Columns:**
+
+- `identifier` (VARCHAR(255)): Usually the user's email address. Not nullable.
+- `token` (VARCHAR(255)): The verification token. Not nullable.
+- `expires` (TIMESTAMP WITH TIME ZONE): When the token expires. Not nullable.
+
+**Indexes:**
+
+- Composite Primary Key on (identifier, token)
+
+---
+
+### 2.5. WorkoutPrograms
 
 **Table Name:** `workout_programs`
 

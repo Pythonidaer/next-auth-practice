@@ -38,7 +38,7 @@ _These are the core containers making up the system. Use these for reference whe
 - **Web Application** — Built with Next.js (App Router), this handles both frontend and backend functionality, including UI rendering, routing, API logic, and server-side authentication.
 - **API Layer (included in Next.js)** — Used to handle server-side logic like fetching/storing workout data, assigning plans, etc.
 - **Database** — PostgreSQL stores structured data like users, workouts, daily logs, and assigned plans.
-- **ORM** — Prisma (planned) will serve as the interface between the Next.js backend and the PostgreSQL database.
+- **ORM** — Prisma serves as the interface between the Next.js backend and the PostgreSQL database, providing type-safe database access and schema management.
 
 #### Container Diagram
 
@@ -53,10 +53,12 @@ _This section outlines the core functional requirements of the Meatbag applicati
 #### Authentication & Access
 
 - Users must be logged in to browse or use the app beyond the sign-in page.
-- Users can sign in using Google (via NextAuth.js).
+- Users can sign in using Google OAuth via NextAuth.js, which is integrated with Prisma using the @auth/prisma-adapter.
+- The Prisma Adapter automatically handles user account creation, session management, and OAuth account linking in the database.
 - (Planned) Users may be able to sign in with credentials or magic link in the future.
 - Authenticated users can securely sign out.
 - Authenticated users can update their account details.
+- User authentication state is managed through NextAuth.js sessions and made available throughout the application via React context.
 
 #### Workout Planning & Management
 
