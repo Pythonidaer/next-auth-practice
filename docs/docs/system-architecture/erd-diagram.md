@@ -12,10 +12,26 @@ The ERD below represents the core building blocks of the Meatbag workout plannin
 
 - **User**
 
+  - Has many `Account`s for OAuth providers.
+  - Has many `Session`s for authentication.
   - Creates many `WorkoutProgram`s.
   - Can send and receive many `WorkoutAssignment`s.
   - Can have many `ExerciseCompletion`s, `WorkoutDayCompletion`s, and `WorkoutGroupCompletion`s.
   - Has one `UserWorkoutStats` record per `WorkoutProgram` they are following.
+
+- **Account** (NextAuth)
+
+  - Belongs to one `User`.
+  - Stores OAuth provider information and tokens.
+
+- **Session** (NextAuth)
+
+  - Belongs to one `User`.
+  - Tracks active authentication sessions.
+
+- **VerificationToken** (NextAuth)
+
+  - Used for email verification (not directly linked to other entities).
 
 - **WorkoutProgram**
 
@@ -83,9 +99,40 @@ erDiagram
         string id PK
         string name
         string email UK
-        string authProvider
+        string image
+        datetime emailVerified
         datetime createdAt
         datetime updatedAt
+    }
+
+    Account {
+        string provider PK
+        string providerAccountId PK
+        string userId FK
+        string type
+        string refresh_token
+        string access_token
+        int expires_at
+        string token_type
+        string scope
+        string id_token
+        string session_state
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    Session {
+        string sessionToken UK
+        string userId FK
+        datetime expires
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    VerificationToken {
+        string identifier PK
+        string token PK
+        datetime expires
     }
 
     WorkoutProgram {
@@ -170,6 +217,9 @@ erDiagram
         datetime lastCompletedAt
         datetime programStartDate
     }
+
+    User ||--o{ Account : has
+    User ||--o{ Session : has
 
     User ||--o{ WorkoutProgram : creates
     WorkoutProgram ||--o{ WorkoutGroup : contains

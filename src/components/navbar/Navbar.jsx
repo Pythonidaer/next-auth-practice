@@ -51,7 +51,7 @@ export default function Navbar() {
           <button
             className={styles.navButton}
             type="button"
-            onClick={() => signIn()}
+            onClick={() => signIn('google')}
           >
             Log In
           </button>

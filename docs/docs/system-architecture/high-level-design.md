@@ -33,7 +33,7 @@ The Meatbag fitness app is part of the **Meatbag System**, which is the software
 
 ## 4. High Level Design
 
-We're building the Meatbag fitness application as a monolithic server-side rendered React app using Next.js. The app will handle both frontend and backend functionality, including UI rendering, routing, API logic, and server-side authentication. It will communicate with a PostgreSQL database through a planned Prisma ORM integration.
+We're building the Meatbag fitness application as a monolithic server-side rendered React app using Next.js. The app will handle both frontend and backend functionality, including UI rendering, routing, API logic, and server-side authentication. It communicates with a PostgreSQL database through Prisma ORM integration.
 
 ### Container Diagram
 
@@ -70,7 +70,7 @@ We're building the Meatbag fitness application as a monolithic server-side rende
 - **Frontend**: React, Next.js (App Router), React Server Components
 - **Backend**: Next.js API routes, NextAuth.js
 - **Database**: PostgreSQL
-- **ORM**: Prisma (planned)
+- **ORM**: Prisma
 - **Deployment**: Vercel
 - **Documentation**: Docusaurus
 - **Testing**: Jest with React Testing Library
@@ -100,7 +100,6 @@ We're building the Meatbag fitness application as a monolithic server-side rende
 
 ### Phase 2: Enhanced Features (Post-MVP)
 
-- Integrate Prisma ORM for improved database interactions
 - Add more sophisticated workout sharing capabilities
 - Implement additional authentication methods (credentials, magic link)
 - Enhance the dashboard with more detailed progress tracking

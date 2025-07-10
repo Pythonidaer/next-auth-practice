@@ -3,6 +3,9 @@
 ## Entities
 
 - `User`
+- `Account` (NextAuth)
+- `Session` (NextAuth)
+- `VerificationToken` (NextAuth)
 - `WorkoutProgram`
 - `WorkoutGroup`
 - `WorkoutDay`
@@ -20,11 +23,24 @@
 ### `User`
 
 - `id`: string (Primary Key)
-- `name`: string
+- `name`: string (optional)
 - `email`: string (Unique)
-- `authProvider`: enum (`google`, ...)
+- `image`: string (optional)
+- `emailVerified`: datetime (optional)
 - `createdAt`: datetime
 - `updatedAt`: datetime
+
+**Relationships**
+
+- One `User` has many `Account`s
+- One `User` has many `Session`s
+- One `User` has many `WorkoutProgram`s
+- One `User` has many `ExerciseCompletion`s
+- One `User` has many `WorkoutDayCompletion`s
+- One `User` has many `WorkoutGroupCompletion`s
+- One `User` has many sent `WorkoutAssignment`s
+- One `User` has many received `WorkoutAssignment`s
+- One `User` has many `UserWorkoutStat`s
 
 **Operations**
 
@@ -36,6 +52,50 @@
 - `getAllUsers()`
 - `updateProfile(details)`
 - `signOut()`
+
+---
+
+### `Account` (NextAuth)
+
+- `provider`: string (Part of Composite Primary Key)
+- `providerAccountId`: string (Part of Composite Primary Key)
+- `userId`: string (Foreign Key to `User.id`)
+- `type`: string
+- `refresh_token`: string (optional)
+- `access_token`: string (optional)
+- `expires_at`: integer (optional)
+- `token_type`: string (optional)
+- `scope`: string (optional)
+- `id_token`: string (optional)
+- `session_state`: string (optional)
+- `createdAt`: datetime
+- `updatedAt`: datetime
+
+**Relationships**
+
+- One `Account` belongs to one `User`
+
+---
+
+### `Session` (NextAuth)
+
+- `sessionToken`: string (Unique)
+- `userId`: string (Foreign Key to `User.id`)
+- `expires`: datetime
+- `createdAt`: datetime
+- `updatedAt`: datetime
+
+**Relationships**
+
+- One `Session` belongs to one `User`
+
+---
+
+### `VerificationToken` (NextAuth)
+
+- `identifier`: string (Part of Composite Primary Key)
+- `token`: string (Part of Composite Primary Key)
+- `expires`: datetime
 
 ---
 

@@ -135,8 +135,9 @@ flowchart TD
 
 5. **User Record Management**:
    - If the user exists: The system retrieves the existing User record and updates any changed information.
-   - If the user is new: The system creates a new User record with the data provided by Google (name, email, image).
-   - For new users, an Account record is created to link the User to their Google account.
+   - If the user is new: The system creates a new User record with the data provided by Google (name, email, image, emailVerified).
+   - For new users, an Account record is created to link the User to their Google account with fields like provider ("google"), providerAccountId, access_token, and other OAuth-specific data.
+   - If email verification is enabled, a VerificationToken record may be created.
 
 ### Session Management Phase
 
@@ -167,8 +168,89 @@ flowchart TD
 - The authentication flow relies on NextAuth.js configuration in `src/app/api/auth/[...nextauth]/route.js`.
 - The Prisma Adapter must be properly configured to connect NextAuth.js to your PostgreSQL database.
 - Required environment variables include `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `NEXTAUTH_SECRET`, and `DATABASE_URL`.
-- The User, Account, Session, and VerificationToken models must be defined in your Prisma schema.
 - Custom session callbacks can be added to include additional user data in the session object.
+
+### NextAuth Database Models
+
+The following models are required for NextAuth with the Prisma Adapter:
+
+**User Model**
+
+```prisma
+model User {
+  id                     String    @id @default(uuid())
+  name                   String?
+  email                  String    @unique
+  emailVerified          DateTime?
+  image                  String?
+  accounts               Account[]
+  sessions               Session[]
+
+  // Application-specific fields and relations
+  createdAt              DateTime  @default(now()) @map("created_at")
+  updatedAt              DateTime  @default(now()) @map("updated_at")
+  workoutPrograms        WorkoutProgram[]
+  // ... other relations
+
+  @@map("users")
+}
+```
+
+**Account Model** (links users to OAuth providers)
+
+```prisma
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+  @@map("accounts")
+}
+```
+
+**Session Model** (for database sessions)
+
+```prisma
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+```
+
+**VerificationToken Model** (for email verification)
+
+```prisma
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+  @@map("verification_tokens")
+}
+```
 
 ---
 

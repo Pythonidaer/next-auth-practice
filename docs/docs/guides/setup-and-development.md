@@ -4,11 +4,11 @@ This guide provides step-by-step instructions for setting up your PostgreSQL dat
 
 ---
 
-## PostgreSQL Database Setup
+## 1. PostgreSQL Database Setup
 
 You will need a PostgreSQL database instance for both development and production.
 
-### Local Database Setup (Development)
+### 1.1. Local Database Setup (Development)
 
 For local development, using Docker is highly recommended as it provides a consistent and isolated environment.
 
@@ -50,7 +50,7 @@ Database Connection String (for .env.local):
 DATABASE_URL="postgresql://meatbag_user:meatbag_password@localhost:5432/meatbag_db?schema=public"
 ```
 
-### Vercel PostgreSQL Setup (Preview & Production)
+### 1.2. Vercel PostgreSQL Setup (Preview & Production)
 
 Vercel offers an integrated PostgreSQL database service, ideal for seamless deployment and managed infrastructure.
 
@@ -76,46 +76,50 @@ Vercel offers an integrated PostgreSQL database service, ideal for seamless depl
 
 ---
 
-## Install Dependencies
+## 2. Install Dependencies
 
-Install the following packages:
-
-**Next.js & React Core:**
+When cloning this project locally, you'll need to install all the dependencies from the package.json file:
 
 ```sh
-npm install react react-dom next
+npm install
 ```
 
-**Prisma (ORM):**
+This will install all required packages, including:
+
+- **Next.js & React Core:** The foundation of the application
+- **Prisma:** For database ORM functionality
+- **NextAuth.js:** For authentication with Google OAuth
+- **Docusaurus:** For documentation
+- **Other dependencies** defined in package.json
+
+**Additional Development Tools:**
 
 ```sh
-npm install prisma @prisma/client
-npm install -D prisma # Prisma CLI as a dev dependency
+npm install -D husky
 ```
 
-**NextAuth.js (Authentication):**
+Husky is needed if you want to use the pre-commit hooks feature for code quality checks.
 
-```sh
-npm install next-auth
+**Environment Variables:**
+
+Create both `.env` and `.env.local` files in the project root with the following variables:
+
+```
+# Database connection
+DATABASE_URL="postgresql://meatbag_user:meatbag_password@localhost:5432/meatbag_db?schema=public"
+
+# NextAuth configuration
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-nextauth-secret"
 ```
 
-**Tailwind CSS (optional, for styling):**
+> **Note:** Both `.env` and `.env.local` files are needed as some packages only read from `.env` while Next.js primarily uses `.env.local`.
 
-```sh
-npm install -D tailwindcss postcss autoprefixer
-npx tailwindcss init -p
-```
+## 3. Initialize Prisma
 
-_Remember to configure `tailwind.config.js` and import Tailwind into `globals.css`._
-
-**Environment Variable Management:**
-
-- Next.js automatically loads `.env.local` and `.env.production`. Ensure your required variables are present.
-
-Prisma handles the database driver, so you don't typically install pg directly unless doing raw SQL or specific database interactions outside of Prisma.
-
-Initializing Prisma
-After installing Prisma, initialize it in your project:
+After installing dependencies, initialize Prisma in your project if it's not already set up:
 
 ```sh
 npx prisma init
@@ -123,8 +127,9 @@ npx prisma init
 
 This command will create a prisma folder with schema.prisma and a .env file. You'll then configure schema.prisma based on your database model.
 
-3. What to Populate (Seed Data)
-   Seed data is crucial for populating your development (and sometimes staging) database with initial users, workout programs, and other necessary records.
+## 4. Populate Seed Data
+
+Seed data is crucial for populating your development (and sometimes staging) database with initial users, workout programs, and other necessary records.
 
 Why seed data?
 
@@ -143,30 +148,63 @@ WorkoutPrograms: A few sample programs with nested WorkoutGroups, WorkoutDays (i
 WorkoutAssignments: Optionally, a few assignments to test the sharing/getting features.
 
 How to Create a Seed Script with Prisma
-Create a seed.ts (or seed.js) file: Inside your prisma directory, create a seed.ts file.
+Create a seed.js file: Inside your prisma directory, create a seed.js file.
 
-```typescript
-// prisma/seed.ts
-import { PrismaClient } from '@prisma/client';
-import { hash } from 'bcryptjs'; // If you're hashing passwords for local users later
+```javascript
+// prisma/seed.js
+const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
 async function main() {
-  // 1. Create a test user
+  // 1. Create a test user (NextAuth will create most user fields)
   const testUser = await prisma.user.upsert({
     where: { email: 'test@example.com' },
     update: {},
     create: {
-      id: 'user_test_123', // You might use a UUID generator in real app
       name: 'Test User',
       email: 'test@example.com',
-      authProvider: 'google', // Or 'credentials' if you add it
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      image: 'https://via.placeholder.com/150',
+      emailVerified: new Date(),
     },
   });
   console.log(`Created test user: ${testUser.name}`);
+
+  // 1.1 Create Account record for the test user (required for NextAuth)
+  // This simulates a Google OAuth account connection
+  await prisma.account.upsert({
+    where: {
+      provider_providerAccountId: {
+        provider: 'google',
+        providerAccountId: '123456789',
+      },
+    },
+    update: {},
+    create: {
+      userId: testUser.id,
+      type: 'oauth',
+      provider: 'google',
+      providerAccountId: '123456789',
+      access_token: 'mock-access-token',
+      expires_at: Math.floor(Date.now() / 1000) + 3600,
+      token_type: 'Bearer',
+      scope: 'openid profile email',
+      id_token: 'mock-id-token',
+    },
+  });
+  console.log('Created test user account (Google OAuth)');
+
+  // 1.2 Create Session for the test user (optional, but realistic)
+  await prisma.session.upsert({
+    where: { sessionToken: 'mock-session-token' },
+    update: {},
+    create: {
+      userId: testUser.id,
+      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+      sessionToken: 'mock-session-token',
+    },
+  });
+  console.log('Created test user session');
 
   // 2. Create a sample Workout Program for the test user
   const sampleProgram = await prisma.workoutProgram.upsert({
@@ -177,8 +215,6 @@ async function main() {
       title: 'Full Body Blast',
       description: 'A comprehensive 2-week full-body workout program.',
       createdByUserId: testUser.id,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     },
   });
   console.log(`Created sample program: ${sampleProgram.title}`);
@@ -192,7 +228,6 @@ async function main() {
       programId: sampleProgram.id,
       order: 1,
       title: 'Week 1',
-      createdAt: new Date(),
     },
   });
   console.log(`Created group: ${week1Group.title}`);
@@ -206,7 +241,6 @@ async function main() {
       groupId: week1Group.id,
       order: 1,
       isRestDay: false,
-      createdAt: new Date(),
     },
   });
   console.log(`Created day: Day ${day1.order}`);
@@ -224,14 +258,27 @@ async function main() {
       targetWorkingSets: 3,
       targetReps: '8-12 reps',
       order: 1,
-      createdAt: new Date(),
     },
   });
-  // ... continue for other days and exercises to complete 7 days for the group
-  // Remember to make some days `isRestDay: true`
   console.log('Sample exercises created for Day 1');
 
-  // Example for a rest day
+  // 5.1 Add another exercise to the same day
+  await prisma.exercise.upsert({
+    where: { id: 'ex_day1_2' },
+    update: {},
+    create: {
+      id: 'ex_day1_2',
+      dayId: day1.id,
+      name: 'Bench Press',
+      notes: 'Keep shoulders back and down.',
+      targetWarmupSets: 1,
+      targetWorkingSets: 3,
+      targetReps: '5-8 reps',
+      order: 2,
+    },
+  });
+
+  // 5.2 Create a rest day example
   await prisma.workoutDay.upsert({
     where: { id: 'day_week1_7' },
     update: {},
@@ -240,12 +287,25 @@ async function main() {
       groupId: week1Group.id,
       order: 7,
       isRestDay: true,
-      createdAt: new Date(),
     },
   });
   console.log('Created Day 7 (Rest Day)');
 
-  // You can add more programs, groups, days, exercises, and even assign workouts here.
+  // 6. Create a workout assignment (sharing a program with another user)
+  // This would typically happen after you have multiple users
+  // For now, we'll just create a placeholder assignment to the same test user
+  await prisma.workoutAssignment.upsert({
+    where: { id: 'assignment_1' },
+    update: {},
+    create: {
+      id: 'assignment_1',
+      senderId: testUser.id,
+      recipientId: testUser.id,
+      programId: sampleProgram.id,
+      isActive: true,
+    },
+  });
+  console.log('Created sample workout assignment');
 }
 
 main()
@@ -268,12 +328,10 @@ Update package.json: Add a seed script to your package.json:
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
-    "db:seed": "ts-node prisma/seed.ts"
+    "db:seed": "node prisma/seed.js"
   }
 }
 ```
-
-(Note: You might need `npm install -D ts-node` if you use TypeScript for the seed script).
 
 Run the seed script:
 
@@ -501,22 +559,24 @@ export async function POST(request: Request) {
 }
 ```
 
-Test Endpoints:
+**Test Endpoints:**
 
-Run your Next.js application locally: npm run dev
+Run your Next.js application locally:
+
+```sh
+npm run dev
+```
 
 Use tools like Postman, Insomnia, or your browser's developer tools to make requests to http://localhost:3000/api/... and verify responses.
 
-5. How to Update Code Files and Project Repo (Git Workflow)
-   A standard Git workflow will help manage your project effectively.
+## 5. Git Workflow for Development
 
-Branching Strategy:
+A standard Git workflow will help manage your project effectively.
 
-main (or master): This branch should always reflect the production-ready code. No direct commits to main.
+**Branching Strategy:**
 
-develop: All new features and bug fixes are integrated into this branch first.
-
-Feature Branches: For every new feature, improvement, or significant bug fix, create a new branch off develop.
+- **main:** This branch should always reflect the production-ready code. No direct commits to main.
+- **Feature Branches:** For every new feature, improvement, or significant bug fix, create a branch off main.
 
 **Branch Naming Convention:**
 
@@ -528,53 +588,57 @@ bugfix/<bug-description>
 chore/<task-description>
 ```
 
-Example: ```sh
-git checkout -b feature/program-creation
-
-````
-
-
-Development Cycle:
-
-Pull develop: git checkout develop && git pull origin develop
-
-Create Feature Branch: ```sh
-git checkout -b feature/your-new-feature
-````
-
-Code & Commit: Write code, commit frequently with clear, concise messages.
-
-git add .
+Example:
 
 ```sh
+git checkout -b feature/program-creation
+```
+
+**Development Cycle:**
+
+1. **Pull main:**
+
+```sh
+git checkout main && git pull origin main
+```
+
+2. **Create Feature Branch:**
+
+```sh
+git checkout -b feature/your-new-feature
+```
+
+3. **Code & Commit:** Write code, commit frequently with clear, concise messages.
+
+```sh
+git add .
 git commit -m "feat: implement program creation form"
 ```
 
-**Push Feature Branch:**
+4. **Push Feature Branch:**
 
 ```sh
 git push origin feature/your-new-feature
 ```
 
-**Open Pull Request (PR):**
-Open a PR from `feature/your-new-feature` to `develop`.
+5. **Open Pull Request (PR):**
+   Open a PR from `feature/your-new-feature` to `main`.
 
-**Code Review:**
-Get your code reviewed by peers.
+6. **Review the Preview:**
+   Vercel automatically creates a preview deployment for your PR. Test it thoroughly.
 
-**Merge to develop:**
-Once reviewed and approved, merge your PR into `develop`.
+7. **Code Review:**
+   Get your code reviewed by peers.
 
-**Deployment to Preview:**
-Changes merged to `develop` (if your Vercel project is configured for it) will trigger a preview deployment.
+8. **Merge to main:**
+   Once reviewed and approved, merge your PR into `main`.
 
-**Deployment to Production:**
-When `develop` is stable and ready for a release, create a PR from `develop` to `main`.
-Once this PR is reviewed and merged, Vercel will automatically trigger a production deployment from the `main` branch.
+9. **Production Deployment:**
+   Vercel automatically deploys the updated `main` branch to production.
 
 ---
 
-## 6. Suggested Branch Order / Plan Guide (MVP Roadmap)
+## 6. Suggested MVP Build Order
 
 This plan prioritizes core functionality and a logical flow for building your MVP, following a module-by-module approach. Each point implies creating the necessary frontend pages/components, API routes, and Prisma schema updates.
 
@@ -666,201 +730,125 @@ This plan prioritizes core functionality and a logical flow for building your MV
 
 This plan provides a logical progression from core functionality to more advanced features, ensuring you have a working MVP that can be iteratively improved. Remember to test thoroughly at each stage!
 
+<!-- Removed duplicate content -->
+
+<!-- Removed duplicate content -->
+
+<!-- Removed duplicate content -->
+
+---
+
+## 7. Local Environment Setup Guide
+
+This section provides instructions for setting up the development environment on a new computer.
+
+### 7.1. Prerequisites
+
+**Install Required Software:**
+
+- **Node.js & npm:** Download and install from [nodejs.org](https://nodejs.org/) (LTS version recommended)
+- **Git:** Download and install from [git-scm.com](https://git-scm.com/downloads)
+- **Docker Desktop:** Download and install from [docker.com](https://www.docker.com/products/docker-desktop/)
+- **DBeaver:** Download and install from [dbeaver.io](https://dbeaver.io/) (optional, for database management)
+- **VS Code:** Download and install from [code.visualstudio.com](https://code.visualstudio.com/) (recommended IDE)
+
+### 7.2. Clone the Repository
+
+```sh
+git clone https://github.com/your-username/meatbag.git
+cd meatbag
+```
+
+### 7.3. Environment Setup
+
+**Create Environment Files:**
+
+Create both `.env` and `.env.local` files in the project root:
+
+```env
+# Database connection
+DATABASE_URL="postgresql://meatbag_user:meatbag_password@localhost:5432/meatbag_db?schema=public"
+
+# NextAuth configuration
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-nextauth-secret"
+```
+
+**Generate a NextAuth Secret:**
+
+You can generate a secure random string for `NEXTAUTH_SECRET` using:
+
+```sh
+node -e "console.log(crypto.randomBytes(32).toString('hex'))"
+```
+
+**Set Up Google OAuth Credentials:**
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select an existing one
+3. Navigate to "APIs & Services" > "Credentials"
+4. Click "Create Credentials" > "OAuth client ID"
+5. Select "Web application", add a name
+6. Add authorized JavaScript origins: `http://localhost:3000`
+7. Add authorized redirect URIs: `http://localhost:3000/api/auth/callback/google`
+8. Copy the Client ID and Client Secret to your `.env` and `.env.local` files
+
+### 7.4. Database Setup
+
+**Start PostgreSQL with Docker:**
+
 ```sh
 docker-compose up -d
 ```
 
-This will pull the `postgres:15` image (if not already present), create and start a container, and expose it on `localhost:5432`.
+This will start the PostgreSQL container using the configuration in your `docker-compose.yml` file.
 
-- **Database Connection String (for `.env.local`):**
+**Connect with DBeaver (Optional):**
 
-```
-DATABASE_URL="postgresql://meatbag_user:meatbag_password@localhost:5432/meatbag_db?schema=public"
-```
+1. Open DBeaver
+2. Click "New Database Connection"
+3. Select PostgreSQL
+4. Enter connection details:
+   - Host: localhost
+   - Port: 5432
+   - Database: meatbag_db
+   - Username: meatbag_user
+   - Password: meatbag_password
+5. Test the connection and save
 
-### 1.2. Vercel PostgreSQL Setup (Preview & Production)
+### 7.5. Project Setup
 
-Vercel offers an integrated PostgreSQL database service, which is ideal for seamless deployment and managed infrastructure.
-
-- **Connect a New Project or Existing Project:**
-
-  - Go to your [Vercel Dashboard](https://vercel.com/dashboard).
-  - If you're creating a new project, follow the steps to import your Git repository.
-  - For an existing project, select it.
-
-- **Navigate to "Storage" Tab:** In your project settings, find the "Storage" tab on the left sidebar.
-
-- **Create a New PostgreSQL Database:**
-
-  - Click "Connect Store" and choose "PostgreSQL".
-  - Select "Create a new PostgreSQL database".
-  - Give it a name (e.g., `meatbag-db-prod` or `meatbag-db-staging`).
-
-- **Connect to your Next.js Project:**
-
-  - After creation, Vercel will prompt you to connect it to your Next.js project.
-  - This will automatically inject the `POSTGRES_PRISMA_URL` (or similar) and `DATABASE_URL` environment variables into your Vercel project settings.
-
-- **Environment Variables:**
-  - Vercel provides the `POSTGRES_PRISMA_URL` and `DATABASE_URL` for your specific database.
-  - **Preview Deployments:** Vercel automatically sets up separate environment variables for preview deployments (e.g., `POSTGRES_PRISMA_URL_PREVIEW`).
-    - By default, these might point to your production database unless configured otherwise.
-    - For isolation in previews, consider creating a separate "Staging/Preview" database and configuring the preview environment variable accordingly.
-  - **Production:** The primary `POSTGRES_PRISMA_URL` will be used.
-
-### 1.3. "Preview" URL for Auth/DB
-
-For MVP, it's generally fine for preview URLs to share the same database as production if that's easier to set up, but with a strong caveat:
-
-- **Pros:** Simpler setup, direct testing of production data interactions.
-- **Cons:**
-  - Data contamination: Preview deployments might write test or incomplete data to your production database.
-  - Security risk: Bugs could damage production data.
-  - State management: Harder to test features that rely on a clean database state.
-
-**Recommendation:** For an MVP, sharing is acceptable if only you are testing. For broader testing, always use a dedicated staging/preview database.
-
----
-
-## 2. What to Install (Dependencies)
-
-**Next.js & React Core:**
+**Install Dependencies:**
 
 ```sh
-npm install react react-dom next
+npm install
 ```
 
-**Prisma (ORM):**
-
-```sh
-npm install prisma @prisma/client
-npm install -D prisma # Prisma CLI as a dev dependency
-```
-
-**NextAuth.js (Authentication):**
-
-```sh
-npm install next-auth
-```
-
-**Tailwind CSS (optional, for styling):**
-
-```sh
-npm install -D tailwindcss postcss autoprefixer
-npx tailwindcss init -p
-```
-
-(Remember to configure `tailwind.config.js` and import Tailwind into `globals.css`)
-
-**Environment Variable Management:**
-
-- Next.js handles `.env.local`, `.env.production` automatically. Ensure you have the required variables.
-
----
-
-## 3. Initializing Prisma
-
-After installing Prisma, initialize it in your project:
-
-```sh
-npx prisma init
-```
-
-This creates a `prisma` folder with `schema.prisma` and a `.env` file. Configure `schema.prisma` based on your database model.
-
----
-
-## 4. What to Populate (Seed Data)
-
-Seed data is crucial for development, demonstration, and testing. Populate with:
-
-- Users: At least one default user account.
-- WorkoutPrograms: A few sample programs with nested groups, days, and exercises.
-- WorkoutAssignments: Optionally, a few assignments for sharing/testing features.
-
-**How to Create a Seed Script with Prisma:**
-
-- Create `prisma/seed.ts` (or `seed.js`) and add sample data (see example in the full guide).
-- Update `package.json`:
-
-```json
-{
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "postinstall": "prisma generate",
-    "db:seed": "ts-node prisma/seed.ts"
-  }
-}
-```
-
-- Run the seed script:
-
-```sh
-npm run db:seed
-```
-
----
-
-## 5. Database Setup with Data and Endpoints Working
-
-- **Define Prisma Schema:** Translate your PostgreSQL schema into `prisma/schema.prisma`.
-- **Generate Prisma Client:**
+**Initialize Prisma:**
 
 ```sh
 npx prisma generate
+npx prisma migrate dev
 ```
 
-- **Run Database Migrations:**
-
-```sh
-npx prisma migrate dev --name init
-```
-
-- **Seed Your Database:**
+**Seed the Database:**
 
 ```sh
 npm run db:seed
 ```
 
-- **Develop API Endpoints:** Create API routes in `src/app/api/.../route.js` (or `.ts`).
+**Start the Development Server:**
+
+```sh
+npm run dev
+```
+
+Your application should now be running at [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## 6. Git Workflow & Branching Strategy
-
-- **main:** Always production-ready code. No direct commits.
-- **develop:** Integrate new features and bug fixes here first.
-- **Feature Branches:** For every new feature, improvement, or bug fix, create a branch off `develop`.
-  - Naming: `feature/<feature-name>`, `bugfix/<desc>`, `chore/<desc>`
-- **Development Cycle:**
-  - Pull `develop`: `git checkout develop && git pull origin develop`
-  - Create feature branch: `git checkout -b feature/your-feature`
-  - Code & commit: `git add .` / `git commit -m "feat: ..."`
-  - Push: `git push origin feature/your-feature`
-  - Open PR to `develop`, review, merge
-  - Deploy preview (Vercel auto-deploys from `develop`)
-  - Merge to `main` for production deployment
-
----
-
-## 7. Suggested MVP Build Order
-
-1. Initial Project Setup (Next.js, dependencies, Tailwind, Prisma, NextAuth, .env)
-2. Authentication & Basic User Flow
-3. Workout Program Definition (Read-Only)
-4. Workout Program Creation
-5. Workout Execution (Today's Workout & Completion)
-6. Program Editing & Deletion
-7. Collaboration & Sharing (MVP)
-8. Workout History (Read-Only)
-9. User Account & Settings
-10. Basic Stats View
-
-Each module involves updating the frontend, backend (API), and Prisma schema as needed.
-
----
+<!-- End of document -->
 
 **For full details, see the inline code comments and the database model/schema documentation.**

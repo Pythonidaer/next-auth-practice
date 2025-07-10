@@ -45,6 +45,8 @@ export default function Home() {
             </div>
             <div className={styles.brandText}>MEATBAG</div>
           </div>
+          <p>Welcome, {session.user?.name}!</p>
+          <p>Your database ID: {session.userId}</p>
           {/* Buttons */}
           <div className={styles.buttonGroup}>
             <Button

@@ -38,7 +38,7 @@ This document outlines the architecture of the Meatbag fitness application MVP.
 | **React**                | UI library: component model, hooks, ecosystem, supports Server/Client Components                        |
 | **NextAuth.js**          | Auth: Google OAuth, future credential/magic-link, Prisma adapter, RSC compatible                        |
 | **PostgreSQL**           | Relational DB: structured user/workout data, supported by Prisma/NextAuth, scalable, open source        |
-| **Prisma (planned)**     | ORM: schema-first, type-safe queries, migrations, Next.js/NextAuth integration, planned post-MVP        |
+| **Prisma**               | ORM: schema-first, type-safe queries, migrations, Next.js/NextAuth integration, essential for MVP       |
 | **Vercel**               | Hosting/CI/CD: zero-config, monorepo-aware, preview deployments, GitHub integration                     |
 | **Docusaurus**           | Docs: Markdown-based, sidebar nav, versioning, easy DX, monorepo deploy, future Typedoc integration     |
 | **Jest**                 | Unit testing: Next.js/React compatible, co-located tests, React Testing Library, 85%+ aspirational cov. |
@@ -53,19 +53,17 @@ This document outlines the architecture of the Meatbag fitness application MVP.
 
 ## 4. Logical Components
 
-| Component           | Description                                         |
-| ------------------- | --------------------------------------------------- |
-| `pages/`            | App routes (dashboard, login, etc.)                 |
-| `components/`       | Reusable UI components (Button, SplashScreen, etc.) |
-| `hooks/`            | Custom React hooks (e.g. `useHydrated`)             |
-| `context/`          | Global state (e.g. authentication, workout plans)   |
-| `api/`              | Next.js API routes for handling server logic        |
-| `models/` (planned) | Prisma schema for `User`, `Workout`, etc.           |
-| `utils/`            | Pure helper functions                               |
-| `tests/`            | Unit tests with Jest                                |
-| `docs/`             | Docusaurus-powered documentation                    |
-| `public/`           | Static assets (images, favicon, etc.)               |
-| `styles/`           | CSS modules or global styles                        |
+| Component     | Description                                          |
+| ------------- | ---------------------------------------------------- |
+| `app/`        | Next.js App Router (pages, layouts, routes)          |
+| `components/` | Reusable UI components with co-located tests and CSS |
+| `hooks/`      | Custom React hooks (e.g. `useHydrated`)              |
+| `context/`    | Global state (e.g. authentication, workout plans)    |
+| `app/api/`    | Next.js API routes for handling server logic         |
+| `prisma/`     | Prisma schema for database models and migrations     |
+| `utils/`      | Pure helper functions                                |
+| `docs/`       | Docusaurus-powered documentation                     |
+| `public/`     | Static assets (images, favicon, etc.)                |
 
 ---
 
@@ -73,10 +71,9 @@ This document outlines the architecture of the Meatbag fitness application MVP.
 
 - Document user flows with visual diagrams (C4 Model)
 - Consider extracting backend into a separate service as scale grows
-- Add jsdoc comments for API documentation
 - Update Architecture Overview to reflect API and database usage
 - Add TypeScript for better DX and API documentation via Typedoc
 
 ---
 
-_Last updated: 2025-06-20_
+_Last updated: 2025-07-10_
