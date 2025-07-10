@@ -18,7 +18,7 @@ page copy.js
 /jest-stare
 
 # prisma
-src/data/generated
+src/generated/prisma
 
 # Windsurf
 WINDSURF_RULES.md
