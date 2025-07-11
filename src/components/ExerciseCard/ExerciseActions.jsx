@@ -10,7 +10,7 @@ export default function ExerciseActions({ exerciseId }) {
   // Handle timers, recording weights, completion, etc.
   return (
     <div className={styles.buttonGroup}>
-      <Button
+      {/* <Button
         color="blue"
         label="START SET TIMER"
         icon={<FaStopwatch />}
@@ -21,7 +21,7 @@ export default function ExerciseActions({ exerciseId }) {
         label="record weights"
         icon={<PiSparkleFill />}
         onClick={() => {}}
-      />
+      /> */}
       <Button color="red" label="Complete" onClick={() => {}} />
     </div>
   );

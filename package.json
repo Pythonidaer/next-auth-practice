@@ -12,6 +12,9 @@
     "test:html": "npx jest --coverage && start ./jest-stare/index.html",
     "postinstall": "prisma generate"
   },
+  "prisma": {
+    "seed": "node prisma/seed.mjs"
+  },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
     "@prisma/client": "^6.11.1",

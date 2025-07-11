@@ -51,7 +51,7 @@ export default function Home() {
           <div className={styles.buttonGroup}>
             <Button
               color="white"
-              label="DASHBOARD"
+              label="Workouts"
               onClick={() => router.push('/dashboard')}
             />
             <Button

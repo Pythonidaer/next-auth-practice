@@ -18,6 +18,7 @@ const config = [
       'public/',
       '.prettierrc',
       'src/generated/prisma/',
+      'prisma/seed.mjs',
     ],
   },
   ...compat.extends('next/core-web-vitals'),
