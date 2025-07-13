@@ -4,7 +4,8 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
-import { FiMenu, FiX } from 'react-icons/fi';
+import { FiMenu } from 'react-icons/fi';
+import { IoClose } from 'react-icons/io5';
 import { FaSpinner } from 'react-icons/fa';
 import styles from './Navbar.module.css';
 import Image from 'next/image';
@@ -115,15 +116,27 @@ export default function Navbar() {
         createPortal(
           <div className={styles.sidebarOverlay}>
             <aside className={styles.sidebar}>
-              <button
-                className={styles.closeButton}
-                aria-label="Close menu"
-                onClick={() => setSidebarOpen(false)}
-              >
-                <span className={styles.closeIcon}>
-                  <FiX />
-                </span>
-              </button>
+              <div className={styles.sidebarHeader}>
+                <button
+                  className={styles.closeButton}
+                  aria-label="Close menu"
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  <span className={styles.closeIcon}>
+                    <IoClose />
+                  </span>
+                </button>
+                <div className={styles.sidebarLogoSection}>
+                  <Image
+                    src="/logo.png"
+                    alt="Meatbag Logo"
+                    width={62}
+                    height={51}
+                    className={styles.logoIcon}
+                  />
+                  <span className={styles.logoText}>Meatbag</span>
+                </div>
+              </div>
               <ul className={styles.sidebarNavItems}>
                 {navItems.map((item) => (
                   <li key={item.label}>
