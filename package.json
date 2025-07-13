@@ -4,6 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "docker:start": "docker compose up -d",
+    "docker:stop": "docker compose down",
+    "docker:logs": "docker compose logs -f",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

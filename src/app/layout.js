@@ -1,9 +1,10 @@
 import React from 'react';
 import './globals.css';
+import { Inter } from 'next/font/google';
+import { League_Spartan } from 'next/font/google';
 import AuthProvider from './context/AuthProvider';
 import Navbar from '../components/Navbar/Navbar';
-import ClientLayout from '../components/ClientLayout'; // <-- new
-import { League_Spartan } from 'next/font/google';
+import ClientLayout from '../components/ClientLayout';
 
 const leagueSpartan = League_Spartan({
   subsets: ['latin'],
@@ -11,8 +12,8 @@ const leagueSpartan = League_Spartan({
 });
 
 export const metadata = {
-  title: 'DEMO: Next Auth',
-  description: 'Blank Next.js Auth Starter',
+  title: 'Meatbag',
+  description: 'Workout Application',
 };
 
 export default function RootLayout({ children }) {

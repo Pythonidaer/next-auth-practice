@@ -19,6 +19,7 @@ const config = [
       '.prettierrc',
       'src/generated/prisma/',
       'prisma/seed.mjs',
+      'prisma/update-active-program.mjs',
     ],
   },
   ...compat.extends('next/core-web-vitals'),
@@ -30,7 +31,7 @@ const config = [
       'max-len': ['warn', { code: 80 }],
       quotes: ['error', 'single', { avoidEscape: true }],
       // independent code paths within a function -- might be off by 3
-      complexity: ['warn', { max: 8 }],
+      complexity: ['warn', { max: 10 }],
       'no-unused-vars': 'warn',
       // errors when console.log is left, but allows console.warn
       'no-console': ['error', { allow: ['warn', 'error'] }],

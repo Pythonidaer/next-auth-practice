@@ -402,6 +402,15 @@ async function main() {
     console.log('Created a sample exercise completion');
   }
 
+  // Set the active workout program for the user
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      activeWorkoutProgramId: '1429a78f-7f5b-46cb-a95b-cab58666de87'
+    }
+  });
+
+  console.log('Set active workout program for user');
   console.log('Seeding completed successfully!');
 }
 
