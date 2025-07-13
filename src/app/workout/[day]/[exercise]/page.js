@@ -120,7 +120,8 @@ export default async function ExercisePage({ params }) {
     return <div>Authentication error. Please try signing in again.</div>;
   }
 
-  const { day, exercise: exerciseParam } = params;
+  // Properly await params
+  const { day, exercise: exerciseParam } = await Promise.resolve(params);
   const exerciseIndex = parseInt(exerciseParam, 10);
 
   // Fetch user with active program

@@ -14,6 +14,9 @@ const leagueSpartan = League_Spartan({
 export const metadata = {
   title: 'Meatbag',
   description: 'Workout Application',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({ children }) {
