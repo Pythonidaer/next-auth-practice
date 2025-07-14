@@ -36,7 +36,7 @@ _This zoomed-out view of the Meatbag system shows its actors and external system
 _These are the core containers making up the system. Use these for reference when designing your container diagram._
 
 - **Web Application** — Built with Next.js (App Router), this handles both frontend and backend functionality, including UI rendering, routing, API logic, and server-side authentication.
-- **API Layer (included in Next.js)** — Used to handle server-side logic like fetching/storing workout data, assigning plans, etc.
+- **API Layer (included in Next.js)** — Used to handle server-side logic like fetching/storing workout data, assigning workout programs, etc.
 - **Database** — PostgreSQL stores structured data like users, workouts, daily logs, and assigned plans.
 - **ORM** — Prisma serves as the interface between the Next.js backend and the PostgreSQL database, providing type-safe database access and schema management.
 
@@ -48,7 +48,8 @@ _These are the core containers making up the system. Use these for reference whe
 
 ### Functional Requirements
 
-_This section outlines the core functional requirements of the Meatbag application. These describe what the user can do in the app and help inform architectural design decisions._
+_This section outlines the core functional requirements of the Meatbag application. These describe what the user can do in the app and help inform architectural design decisions.
+**NOTE: Should consider changing this into a checklist in the future, so Cascade can view similar to a plan**_
 
 #### Authentication & Access
 
@@ -62,12 +63,12 @@ _This section outlines the core functional requirements of the Meatbag applicati
 
 #### Workout Planning & Management
 
-- Authenticated users can create workout plans.
+- Authenticated users can create workout programs.
 - Authenticated users can create exercises within groups of 7 workout days (i.e., a week or custom group).
 - Workout days can be filled with any number of exercises or be designated as "rest days".
-- Authenticated users can drag workout days around within a group to reorder them.
-- Authenticated users can edit workout plans, workout days, and exercises.
-- Authenticated users can delete exercises from a workout day.
+- (Planned) Authenticated users can drag workout days around within a group to reorder them.
+- (Planned) Authenticated users can edit workout programs, workout days, and exercises.
+- (Planned) Authenticated users can delete exercises from a workout day.
 - Authenticated users can preview workout programs before getting or sharing them.
 
 #### Exercise Experience

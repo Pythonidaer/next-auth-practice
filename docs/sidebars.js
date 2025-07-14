@@ -75,15 +75,39 @@ const sidebars = {
       items: [
         'guides/setup-and-development',
         'guides/routes-and-modules',
-        'guides/authentication-flow',
-        'guides/authentication-state-diagram',
-        'guides/authentication-sequence-diagram',
-        'guides/workout-creation-flow',
-        'guides/workout-program-state-diagram',
-        'guides/workout-day-navigation-sequence-diagram',
-        'guides/exercise-completion-sequence-diagram',
-        'guides/program-sharing-state-diagram',
-        'guides/stats-dashboard-state-diagram',
+        {
+          type: 'category',
+          label: 'Authentication',
+          collapsed: true,
+          items: [
+            'guides/authentication/authentication-flow',
+            'guides/authentication/authentication-state-diagram',
+            'guides/authentication/authentication-sequence-diagram',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Workout',
+          collapsed: true,
+          items: [
+            'guides/workout/workout-creation-flow',
+            'guides/workout/workout-program-state-diagram',
+            'guides/workout/workout-day-navigation-sequence-diagram',
+            'guides/workout/program-sharing-state-diagram',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Exercise',
+          collapsed: true,
+          items: ['guides/exercise/exercise-completion-sequence-diagram'],
+        },
+        {
+          type: 'category',
+          label: 'Stats',
+          collapsed: true,
+          items: ['guides/stats/stats-dashboard-state-diagram'],
+        },
       ],
     },
     // {

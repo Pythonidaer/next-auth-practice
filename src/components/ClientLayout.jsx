@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import SplashScreen from './splash-screen/SplashScreen';
 import styles from '@/components/shared/AppTransition.module.css';
 
+// TO DO: Determine if this should be in a hooks/ folder
 function useHydrated() {
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
