@@ -3,6 +3,13 @@
   margin: 0 45px;
 }
 
+.error {
+  color: #e53e3e;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
 /* on larger screens make margin 0 auto */
 @media (min-width: 901px) {
   .buttonGroup {
