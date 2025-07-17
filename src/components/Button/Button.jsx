@@ -9,15 +9,28 @@ export default function Button({
   icon = null,
   onClick,
   type = 'button',
+  disabled = false,
+  isLoading = false,
+  skeletonWidth = null, // Optional custom width for skeleton
 }) {
+  // Determine if we should show skeleton
+  const showSkeleton = isLoading;
+
   return (
     <button
       type={type}
-      className={classNames(styles.button, styles[color])}
+      className={classNames(
+        styles.button,
+        styles[color],
+        disabled && styles.disabled,
+        showSkeleton && styles.skeleton,
+      )}
       onClick={onClick}
+      disabled={disabled || showSkeleton}
+      style={skeletonWidth ? { width: skeletonWidth } : {}}
     >
-      {icon && <span className={styles.icon}>{icon}</span>}
-      <span>{label}</span>
+      {!showSkeleton && icon && <span className={styles.icon}>{icon}</span>}
+      <span>{showSkeleton ? '' : label}</span>
     </button>
   );
 }

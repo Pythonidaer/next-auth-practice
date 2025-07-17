@@ -131,17 +131,53 @@ export default async function ExercisePage({ params }) {
     return <div>User not found. Please try signing in again.</div>;
   }
 
-  // Get the active group ID from the user's active program
-  const activeGroupId = user?.activeWorkoutProgram?.workoutGroups?.[0]?.id;
-  if (!activeGroupId) {
+  if (!user.activeWorkoutProgram) {
     return <div>No active workout program found.</div>;
+  }
+
+  // Check if the day parameter is a UUID (day ID) or a number (global day number)
+  const isUuid =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(day);
+
+  let activeGroupId;
+  let relativeDayInWeek;
+  let dayData = null;
+
+  if (isUuid) {
+    // If it's a UUID, fetch the workout day directly by ID
+    dayData = await prisma.workoutDay.findUnique({
+      where: { id: day },
+      include: {
+        group: true,
+      },
+    });
+
+    if (!dayData) {
+      return <div>Workout day not found.</div>;
+    }
+
+    activeGroupId = dayData.groupId;
+    relativeDayInWeek = dayData.order;
+  } else {
+    // If it's a number, use the original logic
+    const dayNumber = parseInt(day, 10);
+    const weekIndex = Math.floor((dayNumber - 1) / 7);
+
+    // Get the correct group ID based on the week index
+    activeGroupId = user.activeWorkoutProgram.workoutGroups[weekIndex]?.id;
+    if (!activeGroupId) {
+      return <div>Workout week not found for day {day}.</div>;
+    }
+
+    // Calculate the relative day within the week (1-7)
+    relativeDayInWeek = ((dayNumber - 1) % 7) + 1;
   }
 
   // Fetch workout day data
   const workoutDay = await fetchWorkoutDayData(
     session.user.id,
     activeGroupId,
-    day,
+    relativeDayInWeek,
   );
 
   if (!workoutDay || !workoutDay.exercises?.length) {
@@ -153,6 +189,17 @@ export default async function ExercisePage({ params }) {
   if (!exerciseData) {
     return <div>Exercise not found.</div>;
   }
+
+  // Debug logging
+  console.warn('DEBUG - Exercise data:', {
+    dayParam: day,
+    exerciseParam: exerciseParam,
+    isUuid,
+    relativeDayInWeek,
+    exerciseId: exerciseData.id,
+    exerciseName: exerciseData.name,
+    workoutDayId: workoutDay.id,
+  });
 
   const currentExerciseNumber = exerciseIndex + 1;
   const programTitle = workoutDay.group.program.title;

@@ -13,6 +13,15 @@ page copy.js
 !.yarn/releases
 !.yarn/versions
 
+# ignore tests will likely delete
+scripts/
+src/app/api/debug-completions/
+src/app/api/exercises/[id]/day-status/
+src/app/api/fix-completions/
+src/app/debug-completions/
+src/app/fix-completions/
+src/app/api/exercises/[id]/day-status/
+
 # testing
 /coverage
 /jest-stare

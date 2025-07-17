@@ -20,6 +20,10 @@ export async function GET(request, { params }) {
     const userId = session.user.id;
     const exerciseId = params.id;
 
+    console.log(
+      `Checking completion for exercise ID: ${exerciseId}, user ID: ${userId}`,
+    );
+
     // Get the exercise
     const exercise = await prisma.exercise.findUnique({
       where: { id: exerciseId },
@@ -29,6 +33,7 @@ export async function GET(request, { params }) {
     });
 
     if (!exercise) {
+      console.log(`Exercise not found with ID: ${exerciseId}`);
       return NextResponse.json(
         { error: 'Exercise not found' },
         { status: 404 },
@@ -36,6 +41,9 @@ export async function GET(request, { params }) {
     }
 
     const workoutDayId = exercise.day.id;
+    console.log(
+      `Found workout day ID: ${workoutDayId} for exercise ID: ${exerciseId}`,
+    );
 
     // Check if the exercise is completed by this user
     const completion = await prisma.exerciseCompletion.findUnique({
@@ -48,9 +56,32 @@ export async function GET(request, { params }) {
       },
     });
 
+    console.log(
+      `Completion result for exercise ID ${exerciseId}:`,
+      completion ? 'Found' : 'Not found',
+    );
+
+    // For debugging, let's also check if there are any completions for this exercise with any user
+    const allCompletions = await prisma.exerciseCompletion.findMany({
+      where: { exerciseId },
+    });
+
+    console.log(
+      `Total completions found for exercise ID ${exerciseId}: ${allCompletions.length}`,
+    );
+    if (allCompletions.length > 0) {
+      console.log('Sample completion:', allCompletions[0]);
+    }
+
     return NextResponse.json({
       isCompleted: !!completion,
       completedAt: completion?.completedAt || null,
+      debug: {
+        exerciseId,
+        userId,
+        workoutDayId,
+        totalCompletionsForExercise: allCompletions.length,
+      },
     });
   } catch (error) {
     console.error('Error checking exercise completion:', error);

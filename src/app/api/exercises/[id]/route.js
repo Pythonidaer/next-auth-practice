@@ -51,6 +51,7 @@ async function handleDayCompletion(
         user: { connect: { id: userId } },
         workoutGroup: { connect: { id: workoutGroupId } },
         program: { connect: { id: programId } },
+        // Note: The mere existence of this record indicates completion
       },
     });
 
