@@ -16,7 +16,21 @@ export async function PUT(request) {
     const userId = session.user.id;
     const { programId } = await request.json();
 
-    // Validate programId
+    // If programId is null, it means we want to deactivate the current program
+    if (programId === null) {
+      // Update the user's active program to null
+      await prisma.user.update({
+        where: { id: userId },
+        data: { activeWorkoutProgramId: null },
+      });
+
+      return new Response(JSON.stringify({ success: true }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Validate programId for program selection
     if (!programId) {
       return new Response(JSON.stringify({ error: 'Program ID is required' }), {
         status: 400,

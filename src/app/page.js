@@ -6,6 +6,7 @@ import { auth } from './lib/auth';
 import { prisma } from '../utils/prisma';
 import getFirstName from '../utils/getFirstName';
 import WorkoutButtons from '../components/WorkoutButtons/WorkoutButtons';
+import NoActiveProgram from '../components/NoActiveProgram/NoActiveProgram';
 import styles from './page.module.css';
 
 /**
@@ -104,9 +105,6 @@ function renderActiveProgramSection(activeProgram) {
     return (
       <div className={styles.activeProgramSection}>
         <p>You don&rsquo;t have an active workout program selected.</p>
-        <a href="/programs" className={styles.selectProgramLink}>
-          Select a Program
-        </a>
       </div>
     );
   }
@@ -193,15 +191,19 @@ export default async function Home() {
       {renderActiveProgramSection(activeProgram)}
 
       {/* Buttons - Client Component */}
-      <WorkoutButtons
-        firstIncompleteDay={firstIncompleteDay}
-        programId={activeProgram?.id}
-        groupId={activeWorkoutGroup?.id}
-        dayNumber={dayNumber}
-        isRestDay={isRestDay}
-        isProgramComplete={isProgramComplete}
-        activeWorkoutGroup={activeWorkoutGroup}
-      />
+      {activeProgram ? (
+        <WorkoutButtons
+          firstIncompleteDay={firstIncompleteDay}
+          programId={activeProgram?.id}
+          groupId={activeWorkoutGroup?.id}
+          dayNumber={dayNumber}
+          isRestDay={isRestDay}
+          isProgramComplete={isProgramComplete}
+          activeWorkoutGroup={activeWorkoutGroup}
+        />
+      ) : (
+        <NoActiveProgram />
+      )}
 
       {renderFooterSection(session.user?.name, activeProgram, numExercises)}
     </div>

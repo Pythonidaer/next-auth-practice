@@ -79,7 +79,7 @@ export default function WorkoutButtons({
       <Button
         color="white"
         label="Workouts"
-        onClick={() => router.push('/dashboard')}
+        onClick={() => router.push('/workouts')}
       />
 
       {isProgramComplete ? (

@@ -51,6 +51,43 @@ export default function ProgramSelection({
     }
   };
 
+  const handleDeactivateProgram = async () => {
+    if (!selectedProgramId) {
+      return; // No program is active
+    }
+
+    setIsLoading(true);
+    setMessage(null);
+
+    try {
+      const response = await fetch('/api/users/me/active-program', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ programId: null }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to deactivate program');
+      }
+
+      setSelectedProgramId(null);
+      setMessage({
+        type: 'success',
+        text: 'Workout program deactivated successfully!',
+      });
+    } catch (error) {
+      console.error('Error deactivating program:', error);
+      setMessage({
+        type: 'error',
+        text: 'Failed to deactivate workout program. Please try again.',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className={styles.programSelection}>
       {message && (
@@ -78,6 +115,24 @@ export default function ProgramSelection({
             </button>
           </div>
         ))}
+
+        {/* Deactivate Program Card */}
+        {selectedProgramId && (
+          <div className={`${styles.programCard} ${styles.deactivateCard}`}>
+            <h2>Deactivate Program</h2>
+            <p>
+              Remove your current active workout program. You can select a new
+              one at any time.
+            </p>
+            <button
+              className={`${styles.selectButton} ${styles.deactivateButton}`}
+              onClick={handleDeactivateProgram}
+              disabled={isLoading || !selectedProgramId}
+            >
+              Deactivate Program
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

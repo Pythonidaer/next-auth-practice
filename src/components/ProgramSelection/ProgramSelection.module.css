@@ -47,6 +47,22 @@
   transition: background-color 0.2s;
 }
 
+/* Deactivate card styling */
+.deactivateCard {
+  background-color: #f8f8f8;
+  border: 3px solid #e74c3c;
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);
+}
+
+/* Deactivate button styling */
+.deactivateButton {
+  background-color: #e74c3c;
+}
+
+.deactivateButton:hover:not(:disabled) {
+  background-color: #c0392b;
+}
+
 .selectButton:hover:not(:disabled) {
   background-color: #167883;
 }
