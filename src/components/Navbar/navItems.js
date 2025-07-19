@@ -4,7 +4,7 @@ const navItems = [
   { label: 'WORKOUT', href: '/workouts' },
   { label: 'VIEW WORKOUT STATS', href: '/stats' },
   { label: 'CHANGE WORKOUT', href: '/programs' },
-  { label: 'SHARE WORKOUT', href: '/share' },
+  { label: 'SHARE WORKOUT', href: '/programs/share' },
   { label: 'DASHBOARD', href: '/dashboard' },
 ];
 

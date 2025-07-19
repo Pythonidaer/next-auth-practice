@@ -6,7 +6,7 @@ async function main() {
   console.log('Starting seeding process...');
 
   // Use existing user ID
-  const userId = 'fda27cfe-4897-4d34-8945-12e2c29859b2';
+  const userId = 'daa94c10-af0f-4e34-8550-8c8da03111ee';
 
   // Check if user exists
   const existingUser = await prisma.user.findUnique({
@@ -403,14 +403,16 @@ async function main() {
   }
 
   // Set the active workout program for the user
-  await prisma.user.update({
-    where: { id: userId },
-    data: {
-      activeWorkoutProgramId: '1429a78f-7f5b-46cb-a95b-cab58666de87'
-    }
-  });
+    // Comment out setting the active workout program - will set via UI instead
 
-  console.log('Set active workout program for user');
+  // await prisma.user.update({
+  //   where: { id: userId },
+  //   data: {
+  //     activeWorkoutProgramId: '1429a78f-7f5b-46cb-a95b-cab58666de87'
+  //   }
+  // });
+
+  // console.log('Set active workout program for user');
   console.log('Seeding completed successfully!');
 }
 
