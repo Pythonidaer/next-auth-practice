@@ -100,8 +100,8 @@ export default function WorkoutsPage() {
                             ? // If string
                               `${exercise.reps} / ${exercise.sets || 3} SETS`
                             : // If number, format as range
-                              `${exercise.reps}-${Number(exercise.reps) + 2} ` +
-                              `REPS / ${exercise.sets || 3} SETS`
+                              `${exercise.reps}-${Number(exercise.reps) + 2}` +
+                              ` REPS / ${exercise.sets || 3} SETS`
                           : '8-10 REPS / 3 SETS'}
                       </div>
                     </div>
