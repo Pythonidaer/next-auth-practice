@@ -126,7 +126,7 @@
   animation: slideInFromLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 10000; /* Even higher z-index than the overlay */
   pointer-events: auto !important;
-  overflow: hidden; /* Added to prevent scrollbars on the main sidebar itself */
+  overflow-y: auto; /* Restored for scrolling */
 }
 
 @keyframes slideInFromLeft {
