@@ -71,11 +71,11 @@ export async function GET() {
           exercises: isRestDay
             ? []
             : day.exercises.map((exercise) => ({
-                id: exercise.id,
-                name: exercise.name,
-                reps: exercise.targetReps,
-                sets: exercise.targetWorkingSets,
-              })),
+              id: exercise.id,
+              name: exercise.name,
+              reps: exercise.targetReps,
+              sets: exercise.targetWorkingSets,
+            })),
         });
       });
     });

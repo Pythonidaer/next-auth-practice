@@ -82,15 +82,15 @@ export async function POST(request) {
                   create: day.isRestDay
                     ? []
                     : (day.exercises || []).map((exercise) => ({
-                        name: exercise.name,
-                        targetWarmupSets:
+                      name: exercise.name,
+                      targetWarmupSets:
                           parseInt(exercise.targetWarmupSets) || 0,
-                        targetWorkingSets:
+                      targetWorkingSets:
                           parseInt(exercise.targetWorkingSets) || 0,
-                        targetReps: exercise.targetReps || '',
-                        notes: exercise.notes || '',
-                        order: exercise.order,
-                      })),
+                      targetReps: exercise.targetReps || '',
+                      notes: exercise.notes || '',
+                      order: exercise.order,
+                    })),
                 },
               })),
             },

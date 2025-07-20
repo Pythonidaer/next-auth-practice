@@ -98,9 +98,9 @@ export default function WorkoutsPage() {
                         {exercise.reps
                           ? isNaN(Number(exercise.reps))
                             ? // If string
-                              `${exercise.reps} / ${exercise.sets || 3} SETS`
+                            `${exercise.reps} / ${exercise.sets || 3} SETS`
                             : // If number, format as range
-                              `${exercise.reps}-${Number(exercise.reps) + 2}` +
+                            `${exercise.reps}-${Number(exercise.reps) + 2}` +
                               ` REPS / ${exercise.sets || 3} SETS`
                           : '8-10 REPS / 3 SETS'}
                       </div>
