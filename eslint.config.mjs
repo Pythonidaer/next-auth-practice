@@ -28,7 +28,7 @@ const config = [
     rules: {
       indent: ['error', 2], // 2 spaces
       'prettier/prettier': 'off',
-      'max-len': ['warn', { code: 80 }],
+      'max-len': ['warn', { code: 100 }],
       quotes: ['error', 'single', { avoidEscape: true }],
       // independent code paths within a function -- might be off by 3
       complexity: ['warn', { max: 10 }],
