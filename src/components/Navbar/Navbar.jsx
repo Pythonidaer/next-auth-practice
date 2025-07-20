@@ -15,6 +15,7 @@ import navItems from './navItems';
 
 export default function Navbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   // can also destructure and alias data: session if needed below:
   const { status } = useSession();
@@ -24,6 +25,16 @@ export default function Navbar() {
     setIsMounted(true);
     return () => setIsMounted(false);
   }, []);
+
+  // Handle sidebar close with animation
+  const handleCloseSidebar = () => {
+    setIsClosing(true);
+    // Wait for animation to finish before actually closing
+    setTimeout(() => {
+      setSidebarOpen(false);
+      setIsClosing(false);
+    }, 300); // Match this with your CSS animation duration
+  };
 
   // Helper function to render auth buttons/greeting
   const renderAuthControls = () => {
@@ -115,18 +126,24 @@ export default function Navbar() {
         isMounted &&
         createPortal(
           <div className={styles.sidebarOverlay}>
-            <aside className={styles.sidebar}>
+            <aside
+              className={`${styles.sidebar} ${isClosing ? styles.sidebarExit : ''}`}
+            >
               <div className={styles.sidebarHeader}>
                 <button
                   className={styles.closeButton}
                   aria-label="Close menu"
-                  onClick={() => setSidebarOpen(false)}
+                  onClick={handleCloseSidebar}
                 >
                   <span className={styles.closeIcon}>
                     <IoClose />
                   </span>
                 </button>
-                <div className={styles.sidebarLogoSection}>
+                <Link
+                  href="/"
+                  className={styles.sidebarLogoSection}
+                  onClick={handleCloseSidebar}
+                >
                   <Image
                     src="/logo.png"
                     alt="Meatbag Logo"
@@ -135,15 +152,12 @@ export default function Navbar() {
                     className={styles.logoIcon}
                   />
                   <span className={styles.logoText}>Meatbag</span>
-                </div>
+                </Link>
               </div>
               <ul className={styles.sidebarNavItems}>
                 {navItems.map((item) => (
                   <li key={item.label}>
-                    <Link
-                      href={item.href}
-                      onClick={() => setSidebarOpen(false)}
-                    >
+                    <Link href={item.href} onClick={handleCloseSidebar}>
                       {item.label}
                     </Link>
                   </li>
