@@ -196,7 +196,7 @@
 .sidebarNavItems {
   list-style: none;
 
-  padding: 0 31px 30px; /* **Adjusted padding:** Top/bottom padding for the list */
+  padding: 0 31px 60px; /* **Adjusted padding:** Top/bottom padding for the list */
   display: flex;
   flex-direction: column;
   width: 100%;
