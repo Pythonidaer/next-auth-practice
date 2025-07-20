@@ -3,7 +3,7 @@ import './globals.css';
 import { Inter } from 'next/font/google';
 import { League_Spartan } from 'next/font/google';
 import AuthProvider from './context/AuthProvider';
-import Navbar from '../components/Navbar/Navbar';
+import Navbar from '../components/Navbar/Navbar.jsx';
 import ClientLayout from '../components/ClientLayout';
 
 const leagueSpartan = League_Spartan({
