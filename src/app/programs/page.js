@@ -16,12 +16,41 @@ export default async function ProgramsPage() {
     );
   }
 
-  // Fetch all available workout programs
+  // Fetch programs that are either:
+  // 1. Created by the current user for themselves
+  // 2. Assigned to the current user by someone else
   const programs = await prisma.workoutProgram.findMany({
+    where: {
+      OR: [
+        // Programs created by the current user for themselves
+        {
+          createdByUserId: session.user.id,
+          // Exclude programs that have been assigned to other users
+          NOT: {
+            assignments: {
+              some: {
+                senderId: session.user.id,
+                recipientId: { not: session.user.id }, // Not self-assigned
+              },
+            },
+          },
+        },
+        // Programs assigned to the current user (by anyone)
+        {
+          assignments: {
+            some: {
+              recipientId: session.user.id,
+              isActive: true,
+            },
+          },
+        },
+      ],
+    },
     select: {
       id: true,
       title: true,
       description: true,
+      createdByUserId: true, // Include this to show who created the program
     },
     orderBy: {
       title: 'asc',
