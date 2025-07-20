@@ -203,6 +203,7 @@
   flex-grow: 1; /* Allows it to take up all available space */
   overflow-y: auto; /* **Moved here:** Apply scrolling to the content area */
   -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
+  margin-bottom: 56px;
 }
 
 .sidebarNavItems li {
