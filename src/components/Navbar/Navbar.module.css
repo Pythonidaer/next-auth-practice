@@ -112,30 +112,38 @@
   display: flex;
   justify-content: flex-end;
   pointer-events: auto !important;
+  /* **New:** Use safe-area-inset for full screen on iOS */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 .sidebar {
   width: 100vw;
-  height: 100vh;
+  max-width: 320px;
+  /* height: 100vh; */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   background: linear-gradient(
     180deg,
     rgba(51, 10, 10, 1) 0%,
     rgba(30, 145, 153, 1) 100%
   );
   box-shadow: -2px 0 12px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
   padding: 0;
   position: relative;
-  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); */
+  animation: slideInFromRight 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 10000; /* Even higher z-index than the overlay */
   pointer-events: auto !important;
-  overflow-y: auto;
+  /* overflow-y: auto; */
 }
 
 @keyframes slideIn {
   from {
-    transform: translateX(-100%);
+    transform: translateX(100%);
   }
   to {
     transform: translateX(0);
@@ -144,11 +152,13 @@
 
 .sidebarHeader {
   display: flex;
+  /* align-items: center; */
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: center;
   width: 100%;
   padding: 56px 31px 0;
   position: relative;
+  flex-shrink: 0;
 }
 
 .closeButton {
@@ -159,6 +169,7 @@
   color: #ffffff;
   padding: 0;
   margin: 0;
+  margin-top: 5px;
 }
 
 .closeIcon {
@@ -173,17 +184,29 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-left: auto;
+  /* margin-left: auto; */
 }
 
 .sidebarNavItems {
   list-style: none;
-  margin: 80px 0 0 0;
-  padding: 0 31px;
+  /* margin: 80px 0 0 0; */
+  /* padding: 0 31px; */
+  padding: 30px 31px; /* **Adjusted padding:** Top/bottom padding for the list */
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 30px;
   width: 100%;
+  /* **Crucial Change:** Allow nav items to grow and become scrollable */
+  flex-grow: 1; /* Allows it to take up all available space */
+  overflow-y: auto; /* **Moved here:** Apply scrolling to the content area */
+  -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
+  justify-content: center; /* Vertically center items when content is short */
+  align-items: center; /* Center text horizontally */
+}
+
+.sidebarNavItems li {
+  width: 100%;
+  text-align: center;
 }
 
 .sidebarNavItems li a {
@@ -194,9 +217,9 @@
   font-size: 30px;
   line-height: 100%;
   text-transform: uppercase;
-  text-align: center;
+  /* text-align: center; */
   letter-spacing: 0.5px;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   display: block;
   width: 100%;
   padding: 8px 0;
@@ -219,6 +242,8 @@
   color: #fff;
   border-radius: 6px;
   padding: 16px 20px;
+  /* **New:** Add some top margin for the button specifically if it's the last item */
+  margin-top: 20px; /* Adjust as needed for spacing from the last link */
 }
 
 /* Navbar.module.css */
@@ -248,7 +273,7 @@
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-  font-size: 1.2em; /* adjust as needed */
+  font-size: 1.2em;
 }
 
 .navButton {
