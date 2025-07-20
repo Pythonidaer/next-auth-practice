@@ -105,6 +105,115 @@ function renderFooterSection(
   );
 }
 
+/**
+ * Validates the user session and returns user data or an error component
+ */
+async function validateUserSession(userId) {
+  // Fetch user with active program
+  const user = await fetchUserWithActiveProgram(userId);
+
+  if (!user) {
+    return {
+      error: <div>User not found. Please try signing in again.</div>,
+      user: null,
+    };
+  }
+
+  if (!user.activeWorkoutProgram) {
+    return {
+      error: <div>No active workout program found.</div>,
+      user: null,
+    };
+  }
+
+  return { user, error: null };
+}
+
+/**
+ * Resolves the workout day information based on the day parameter
+ */
+async function resolveWorkoutDay(day, user) {
+  // Check if the day parameter is a UUID (day ID) or a number (global day number)
+  const isUuid =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(day);
+
+  let activeGroupId;
+  let relativeDayInWeek;
+
+  if (isUuid) {
+    // If it's a UUID, fetch the workout day directly by ID
+    const dayData = await prisma.workoutDay.findUnique({
+      where: { id: day },
+      include: {
+        group: true,
+      },
+    });
+
+    if (!dayData) {
+      return {
+        error: <div>Workout day not found.</div>,
+        dayInfo: null,
+      };
+    }
+
+    activeGroupId = dayData.groupId;
+    relativeDayInWeek = dayData.order;
+  } else {
+    // If it's a number, use the original logic
+    const dayNumber = parseInt(day, 10);
+    const weekIndex = Math.floor((dayNumber - 1) / 7);
+
+    // Get the correct group ID based on the week index
+    activeGroupId = user.activeWorkoutProgram.workoutGroups[weekIndex]?.id;
+    if (!activeGroupId) {
+      return {
+        error: <div>Workout week not found for day {day}.</div>,
+        dayInfo: null,
+      };
+    }
+
+    // Calculate the relative day within the week (1-7)
+    relativeDayInWeek = ((dayNumber - 1) % 7) + 1;
+  }
+
+  return {
+    dayInfo: { activeGroupId, relativeDayInWeek, isUuid },
+    error: null,
+  };
+}
+
+/**
+ * Fetches exercise data for the given workout day and exercise index
+ */
+async function getExerciseData(userId, dayInfo, exerciseIndex) {
+  // Fetch workout day data
+  const workoutDay = await fetchWorkoutDayData(
+    userId,
+    dayInfo.activeGroupId,
+    dayInfo.relativeDayInWeek,
+  );
+
+  if (!workoutDay || !workoutDay.exercises?.length) {
+    return {
+      error: <div>Workout day or exercises not found.</div>,
+      exerciseData: null,
+      workoutDay: null,
+    };
+  }
+
+  // Get the current exercise
+  const exerciseData = workoutDay.exercises[exerciseIndex];
+  if (!exerciseData) {
+    return {
+      error: <div>Exercise not found.</div>,
+      exerciseData: null,
+      workoutDay,
+    };
+  }
+
+  return { exerciseData, workoutDay, error: null };
+}
+
 export default async function ExercisePage({ params }) {
   // Get the session using the auth helper
   const session = await auth();
@@ -124,78 +233,34 @@ export default async function ExercisePage({ params }) {
   const { day, exercise: exerciseParam } = await Promise.resolve(params);
   const exerciseIndex = parseInt(exerciseParam, 10);
 
-  // Fetch user with active program
-  const user = await fetchUserWithActiveProgram(session.user.id);
-
-  if (!user) {
-    return <div>User not found. Please try signing in again.</div>;
+  // Validate user session
+  const { user, error: userError } = await validateUserSession(session.user.id);
+  if (userError) {
+    return userError;
   }
 
-  if (!user.activeWorkoutProgram) {
-    return <div>No active workout program found.</div>;
+  // Resolve workout day information
+  const { dayInfo, error: dayError } = await resolveWorkoutDay(day, user);
+  if (dayError) {
+    return dayError;
   }
 
-  // Check if the day parameter is a UUID (day ID) or a number (global day number)
-  const isUuid =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(day);
-
-  let activeGroupId;
-  let relativeDayInWeek;
-  let dayData = null;
-
-  if (isUuid) {
-    // If it's a UUID, fetch the workout day directly by ID
-    dayData = await prisma.workoutDay.findUnique({
-      where: { id: day },
-      include: {
-        group: true,
-      },
-    });
-
-    if (!dayData) {
-      return <div>Workout day not found.</div>;
-    }
-
-    activeGroupId = dayData.groupId;
-    relativeDayInWeek = dayData.order;
-  } else {
-    // If it's a number, use the original logic
-    const dayNumber = parseInt(day, 10);
-    const weekIndex = Math.floor((dayNumber - 1) / 7);
-
-    // Get the correct group ID based on the week index
-    activeGroupId = user.activeWorkoutProgram.workoutGroups[weekIndex]?.id;
-    if (!activeGroupId) {
-      return <div>Workout week not found for day {day}.</div>;
-    }
-
-    // Calculate the relative day within the week (1-7)
-    relativeDayInWeek = ((dayNumber - 1) % 7) + 1;
-  }
-
-  // Fetch workout day data
-  const workoutDay = await fetchWorkoutDayData(
-    session.user.id,
-    activeGroupId,
-    relativeDayInWeek,
-  );
-
-  if (!workoutDay || !workoutDay.exercises?.length) {
-    return <div>Workout day or exercises not found.</div>;
-  }
-
-  // Get the current exercise
-  const exerciseData = workoutDay.exercises[exerciseIndex];
-  if (!exerciseData) {
-    return <div>Exercise not found.</div>;
+  // Get exercise data
+  const {
+    exerciseData,
+    workoutDay,
+    error: exerciseError,
+  } = await getExerciseData(session.user.id, dayInfo, exerciseIndex);
+  if (exerciseError) {
+    return exerciseError;
   }
 
   // Debug logging
   console.warn('DEBUG - Exercise data:', {
     dayParam: day,
     exerciseParam: exerciseParam,
-    isUuid,
-    relativeDayInWeek,
+    isUuid: dayInfo.isUuid,
+    relativeDayInWeek: dayInfo.relativeDayInWeek,
     exerciseId: exerciseData.id,
     exerciseName: exerciseData.name,
     workoutDayId: workoutDay.id,
@@ -206,7 +271,10 @@ export default async function ExercisePage({ params }) {
 
   return (
     <div className={styles.pageContainer}>
-      <div className={styles.flexGrow}>{renderExerciseCard(exerciseData)}</div>
+      <div className={styles.flexGrow}>
+        {/* Wrap in fragment to prevent stray text nodes */}
+        <>{renderExerciseCard(exerciseData)}</>
+      </div>
       <div className={styles.stickyBottom}>
         {/* Add the ExerciseNavigation component for swipe/carousel functionality */}
         <ExerciseNavigation
