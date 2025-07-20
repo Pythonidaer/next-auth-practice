@@ -1,0 +1,50 @@
+.navigationContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 0;
+  touch-action: pan-y; /* Allow vertical scrolling but capture horizontal swipes */
+}
+
+.navButton {
+  background: none;
+  border: none;
+  color: #ccb396;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.navButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.navButton:hover:not(:disabled) {
+  color: #fff;
+}
+
+.paginationIndicator {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(204, 179, 150, 0.5);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.activeDot {
+  background-color: #ccb396;
+  transform: scale(1.2);
+}

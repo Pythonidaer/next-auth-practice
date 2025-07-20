@@ -107,22 +107,29 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.15);
-  z-index: 100;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999; /* Increased z-index to ensure it's above all content */
   display: flex;
   justify-content: flex-end;
+  pointer-events: auto !important;
 }
 
 .sidebar {
   width: 100vw;
   height: 100vh;
-  background: #fff;
-  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.07);
+  background: linear-gradient(
+    180deg,
+    rgba(51, 10, 10, 1) 0%,
+    rgba(30, 145, 153, 1) 100%
+  );
+  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  padding: 32px 24px 24px 24px;
+  padding: 0;
   position: relative;
   animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10000; /* Even higher z-index than the overlay */
+  pointer-events: auto !important;
 }
 
 @keyframes slideIn {
@@ -134,39 +141,83 @@
   }
 }
 
+.sidebarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 56px 31px 0;
+  position: relative;
+}
+
 .closeButton {
-  position: absolute;
-  top: 24px;
-  left: 24px;
   background: none;
   border: none;
   font-size: 28px;
   cursor: pointer;
+  color: #ffffff;
+  padding: 0;
+  margin: 0;
 }
 
 .closeIcon {
-  font-size: 28px;
-  color: #222;
+  font-size: 50px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebarLogoSection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
 }
 
 .sidebarNavItems {
   list-style: none;
-  margin: 64px 0 0 0;
-  padding: 0;
+  margin: 80px 0 0 0;
+  padding: 0 31px;
   display: flex;
   flex-direction: column;
   gap: 28px;
+  width: 100%;
 }
 
 .sidebarNavItems li a {
-  color: #222;
+  color: #ffffff;
   text-decoration: none;
-  font-size: 18px;
-  font-weight: 500;
+  font-family: 'League Spartan', sans-serif;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 100%;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 0.5px;
+  margin-bottom: 20px;
+  display: block;
+  width: 100%;
+  padding: 8px 0;
 }
 
 .sidebarNavItems li a:hover {
-  color: #0070f3;
+  color: #ccb396;
+}
+
+/* Center the logout button in the sidebar */
+.sidebarNavItems li .navButton {
+  display: block;
+  margin: 0 auto;
+  width: 140px;
+  font-family: 'League Spartan', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  text-transform: uppercase;
+  background-color: #111;
+  color: #fff;
+  border-radius: 6px;
+  padding: 16px 20px;
 }
 
 /* Navbar.module.css */

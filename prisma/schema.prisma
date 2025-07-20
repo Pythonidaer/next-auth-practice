@@ -25,7 +25,8 @@ model User {
   emailVerified          DateTime?               
   createdAt              DateTime                 @default(now()) @map("created_at")
   updatedAt              DateTime                 @default(now()) @map("updated_at")
-  
+  activeWorkoutProgramId  String?   @map("active_workout_program_id")
+  activeWorkoutProgram    WorkoutProgram? @relation("ActiveProgram", fields: [activeWorkoutProgramId], references: [id], onDelete: SetNull)
   // Relations
   workoutPrograms        WorkoutProgram[]         @relation("CreatedByUser")
   exerciseCompletions    ExerciseCompletion[]
@@ -92,6 +93,8 @@ model WorkoutProgram {
   createdAt              DateTime                 @default(now()) @map("created_at")
   updatedAt              DateTime                 @default(now()) @map("updated_at")
   
+  usersActiveProgram      User[] @relation("ActiveProgram")
+
   // Relations
   createdByUser          User                     @relation("CreatedByUser", fields: [createdByUserId], references: [id], onDelete: Cascade)
   workoutGroups          WorkoutGroup[]

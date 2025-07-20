@@ -243,6 +243,7 @@ The following Prisma models support the authentication state management:
    ```
 
 4. **VerificationToken Model** - Handles email verification (part of the Authenticating state):
+
    ```prisma
    model VerificationToken {
      identifier String

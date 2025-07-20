@@ -1,42 +1,12 @@
+// Import NextAuth and the auth options from our centralized configuration
 import NextAuth from 'next-auth';
-// import GitHubProvider from 'next-auth/providers/github';
-import GoogleProvider from 'next-auth/providers/google';
-import { PrismaAdapter } from '@auth/prisma-adapter';
-import { prisma } from '../../../../utils/prisma.js'; // adjust path if needed
+import { authOptions } from '../../../lib/auth';
 
-const handler = NextAuth({
-  adapter: PrismaAdapter(prisma),
-  providers: [
-    // GitHubProvider({
-    //   clientId: process.env.GITHUB_ID,
-    //   clientSecret: process.env.GITHUB_SECRET,
-    // }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    }),
-  ],
-  pages: {
-    signIn: '/auth/signin', // optional
-  },
-  callbacks: {
-    // can also pass url as a param
-    async redirect({ baseUrl }) {
-      // Only allow redirects within your site
-      // return url.startsWith(baseUrl) ? url : baseUrl;
-
-      // Always redirect to homepage after sign-in
-      return baseUrl;
-    },
-    // lets you customize the session object returned to the client.
-    async session({ session, user }) {
-      session.userId = user.id;
-      return session;
-    },
-  },
-});
-
+// Create and export the API route handlers
+const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
+
+// The auth helper for server components is exported from src/utils/auth.js
 
 /*
 Future to look into:

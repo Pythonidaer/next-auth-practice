@@ -1,8 +1,11 @@
 // src/components/Navbar/navItems.js
 const navItems = [
-  { label: 'About', href: '/about' },
-  { label: 'Dashboard', href: '/dashboard' },
-  // Add more static navigation items here
+  { label: 'ABOUT', href: '/about' },
+  { label: 'WORKOUT', href: '/workouts' },
+  { label: 'VIEW WORKOUT STATS', href: '/stats' },
+  { label: 'CHANGE WORKOUT', href: '/programs' },
+  { label: 'SHARE WORKOUT', href: '/programs/share' },
+  { label: 'DASHBOARD', href: '/dashboard' },
 ];
 
 export default navItems;

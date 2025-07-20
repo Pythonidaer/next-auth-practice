@@ -6,11 +6,11 @@ Welcome to the MEATBAG workout application documentation! This guide will help y
 
 MEATBAG is a Next.js-based workout tracking application that helps users manage their fitness routines. The application features:
 
-- User authentication via Google OAuth
+- User authentication via Google OAuth (NextAuth + Prisma Adapter)
 - Personalized workout plans
 - Exercise tracking and progress monitoring
 - Responsive design for both desktop and mobile use
-- Timer functionality for workout sets
+- TBD: Timer functionality for workout sets
 
 ## How to Use This Documentation
 
@@ -85,12 +85,14 @@ This documentation is designed to be maintainable and expandable. When adding ne
 2. Use clear, concise markdown formatting
 3. Update the sidebar in `docs/sidebars.js` to include new files
 4. Follow the existing naming and organization patterns
+5. Ask yourself if there is a better, easier way to group information
+6. Discuss with team members how architecture can be implemented into Windsurf (AI) Workflows, Rules and Planning features
 
 ## Future Development Workflow
 
-### Windsurf Rules for Development
+### TBD: Windsurf Rules for Development
 
-To maintain consistency and quality in future development, this project follows a structured workflow defined in the `WINDSURF_RULES.md` file located in the project root. This file serves as the source of truth for development processes when working with Windsurf's Cascade AI assistant.
+To maintain consistency and quality in future development, this project will follow a structured workflow defined in the `WINDSURF_RULES.md` file located in the project root. This file serves as the source of truth for development processes when working with Windsurf's Cascade AI assistant.
 
 #### Key Workflow Components
 
@@ -99,11 +101,14 @@ To maintain consistency and quality in future development, this project follows 
    - All new features begin with test creation
    - Tests follow patterns documented in `docs/docs/tests`
    - Reference `UNIT_TESTING_BEST_PRACTICES.md` for test standards
+   - Upon completion of test and feature, Docusaurus Test documentation will be updated
 
 2. **Feature Implementation**
 
    - Implement features only after tests are created
    - Follow established patterns in similar components/features
+     - Coding Best Practices will eventually be massaged into rules files
+     - Linting and formatting will be explored as well to minimize ambiguitiy and manual work as much as possible
    - Maintain consistent code style and organization
 
 3. **Verification**
@@ -124,7 +129,12 @@ When requesting Cascade to create or modify features:
 
 1. Cascade will first consult `WINDSURF_RULES.md` to understand the workflow
 2. Development will follow the TDD approach by default
-3. Documentation will be updated as part of the completion criteria
-4. The process isn't complete until all steps (tests, implementation, verification, documentation) are finished
+3. Cascade will maintain and update `plan.md` throughout the development process to:
+   - Track progress on tasks and subtasks
+   - Document blockers and clarification needs
+   - Record design decisions and implementation details
+   - Plan next steps and prioritize work
+4. Documentation will be updated as part of the completion criteria
+5. The process isn't complete until all steps (tests, implementation, verification, documentation, and planning) are finished
 
-This structured approach ensures consistency, maintainability, and comprehensive documentation across all development efforts.
+This structured approach ensures consistency, maintainability, readability, and comprehensive documentation across all development efforts.

@@ -138,6 +138,5 @@ We're building the Meatbag fitness application as a monolithic server-side rende
 - [ERD Diagram](./erd-diagram.md)
 - [Architectural Requirements](./requirements.md)
 - [Architecture Overview](./overview.md)
-- [Authentication Sequence Diagram](../guides/authentication-sequence-diagram.md)
-- [Workout Day Navigation Sequence Diagram](../guides/workout-day-navigation-sequence-diagram.md)
-- [Exercise Completion Sequence Diagram](../guides/exercise-completion-sequence-diagram.md)
+- [Authentication Flow Diagram](../guides/authentication/authentication-flow.md)
+- [Workout Creation Flow Diagram](../guides/workout/workout-creation-flow.md)

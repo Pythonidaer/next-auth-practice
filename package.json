@@ -4,6 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "docker:start": "docker compose up -d",
+    "docker:stop": "docker compose down",
+    "docker:logs": "docker compose logs -f",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -11,6 +14,9 @@
     "prepare": "husky install",
     "test:html": "npx jest --coverage && start ./jest-stare/index.html",
     "postinstall": "prisma generate"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.mjs"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
@@ -44,8 +50,8 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
+      "prettier --write",
+      "eslint --fix"
     ],
     "*.{json,css,md}": [
       "prettier --write"

@@ -11,6 +11,13 @@ This document outlines the architecture of the Meatbag fitness application MVP.
 - **Component-based** UI (React)
 - **Data-driven** interaction model (PostgreSQL backend)
 - Built as a **fullstack app** deployed on [Vercel](https://vercel.com/)
+- **Docusaurus** for documentation
+- **Jest** for unit testing
+- **ESLint + Prettier** for linting and formatting
+- **Prisma** for database schema and migrations
+- **NextAuth.js** for authentication
+- **PostgreSQL** for database
+- **Vercel** for deployment
 
 ---
 
@@ -69,11 +76,11 @@ This document outlines the architecture of the Meatbag fitness application MVP.
 
 ## 🧩 Future Considerations
 
-- Document user flows with visual diagrams (C4 Model)
-- Consider extracting backend into a separate service as scale grows
+- Document user flows with visual diagrams (Sequence, State)
+- Consider extracting backend into a separate service as scale grows (or move from Vercel/Prisma to AWS?)
 - Update Architecture Overview to reflect API and database usage
 - Add TypeScript for better DX and API documentation via Typedoc
 
 ---
 
-_Last updated: 2025-07-10_
+_Last updated: 2025-07-14_

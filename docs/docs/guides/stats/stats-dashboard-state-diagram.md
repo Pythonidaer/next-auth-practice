@@ -186,7 +186,7 @@ stateDiagram-v2
 - Refer to it when implementing dashboard features and metric calculations.
 - Ensure all state transitions are properly handled in the application code.
 - Consider the user experience implications of each state transition.
-- For the workout completion process that generates the initial data, see the [Workout Creation Flow Diagram](./workout-creation-flow.md).
+- For the workout completion process that generates the initial data, see the [Workout Creation Flow Diagram](../workout/workout-creation-flow.md).
 
 ---
 

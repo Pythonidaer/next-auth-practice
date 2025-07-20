@@ -259,4 +259,4 @@ model VerificationToken {
 - Use this flowchart as a reference for understanding the authentication process.
 - Refer to it when implementing or debugging authentication-related features.
 - Update the diagram as the authentication flow evolves.
-- For more detail on database models, see the [ERD Diagram](../system-architecture/erd-diagram.md).
+- For more detail on database models, see the [ERD Diagram](../../system-architecture/erd-diagram.md).

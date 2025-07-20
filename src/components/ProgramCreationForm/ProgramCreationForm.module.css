@@ -1,0 +1,230 @@
+.formContainer {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 2rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.input,
+.textarea,
+.select {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.select option {
+  background-color: #121212;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border: none;
+}
+
+.primaryButton {
+  background-color: #1e9199;
+  color: white;
+}
+
+.primaryButton:hover:not(:disabled) {
+  background-color: #167883;
+}
+
+.primaryButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.secondaryButton {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.secondaryButton:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.cancelButton {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.cancelButton:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.stepIndicator {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.step {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0.5rem;
+  font-weight: 600;
+}
+
+.stepActive {
+  background-color: #1e9199;
+}
+
+.stepCompleted {
+  background-color: #2ecc71;
+}
+
+.stepLine {
+  flex-grow: 1;
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin-top: 15px;
+}
+
+.stepLineActive {
+  background-color: #1e9199;
+}
+
+.stepLineCompleted {
+  background-color: #2ecc71;
+}
+
+.message {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.success {
+  background-color: rgba(46, 204, 113, 0.2);
+  color: #2ecc71;
+}
+
+.error {
+  background-color: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+}
+
+.card {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.cardTitle {
+  font-weight: 600;
+  margin: 0;
+}
+
+.cardActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.iconButton {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0.25rem;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconButton:hover {
+  color: #1e9199;
+}
+
+.addButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+.addButton:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.dragHandle {
+  cursor: grab;
+  margin-right: 0.5rem;
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.checkbox {
+  margin-right: 0.5rem;
+}
+
+.exerciseForm {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
