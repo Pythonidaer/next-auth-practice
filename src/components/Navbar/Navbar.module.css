@@ -123,29 +123,40 @@
   box-shadow: -2px 0 12px rgba(0, 0, 0, 0.2);
   padding: 0;
   position: relative;
-  animation: slideInFromRight 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideInFromLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 10000; /* Even higher z-index than the overlay */
   pointer-events: auto !important;
   overflow: hidden; /* Added to prevent scrollbars on the main sidebar itself */
 }
 
-@keyframes slideIn {
+@keyframes slideInFromLeft {
   from {
-    transform: translateX(100%);
+    transform: translateX(-100%);
   }
   to {
     transform: translateX(0);
   }
 }
 
+@keyframes slideOutToLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.sidebarExit {
+  animation: slideOutToLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
 .sidebarHeader {
   display: flex;
   align-items: center;
-  /* align-items: flex-start; */
   justify-content: space-between;
   width: 100%;
-  /* padding: 56px 31px 0; */
-  padding: 40px 31px 20px; /* Reduced top padding slightly for better initial look, increased bottom */
+  padding: 56px 40px 20px 31px;
   position: relative;
   flex-shrink: 0;
 }
@@ -158,7 +169,6 @@
   color: #ffffff;
   padding: 0;
   margin: 0;
-  /* margin-top: 5px; */
 }
 
 .closeIcon {
@@ -172,33 +182,27 @@
 .sidebarLogoSection {
   display: flex;
   align-items: center;
-  /* gap: 8px; */
-  gap: 4px;
-  /* margin-left: auto; */
+  text-decoration: none;
+  gap: 8px;
   margin-left: 20px; /* Adjust as needed */
 }
 
 /* Adjust logo text size for better fit in header */
 .sidebarLogoSection .logoText {
-  font-size: 40px; /* Smaller font size for the header logo text */
+  font-size: 55.23px; /* Smaller font size for the header logo text */
   line-height: 1; /* Ensure tight line height */
 }
 
 .sidebarNavItems {
   list-style: none;
-  /* margin: 80px 0 0 0; */
-  /* padding: 0 31px; */
+
   padding: 0 31px 30px; /* **Adjusted padding:** Top/bottom padding for the list */
   display: flex;
   flex-direction: column;
-  /* gap: 30px; */
   width: 100%;
-  /* **Crucial Change:** Allow nav items to grow and become scrollable */
   flex-grow: 1; /* Allows it to take up all available space */
   overflow-y: auto; /* **Moved here:** Apply scrolling to the content area */
   -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
-  /* justify-content: center;  Vertically center items when content is short */
-  /* align-items: center;  Center text horizontally */
 }
 
 .sidebarNavItems li {
