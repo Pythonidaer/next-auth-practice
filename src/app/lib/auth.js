@@ -17,9 +17,17 @@ export const authOptions = {
     signIn: '/auth/signin', // Your custom sign-in page
   },
   callbacks: {
-    // can also pass url as a param
-    async redirect({ baseUrl }) {
-      // Always redirect to homepage after sign-in
+    // Fix the redirect callback to properly handle the callbackUrl
+    async redirect({ url, baseUrl }) {
+      // If the url is relative (starts with /), prepend the baseUrl
+      if (url.startsWith('/')) {
+        return `${baseUrl}${url}`;
+      }
+      // If the url is already absolute and on the same site, allow it
+      else if (new URL(url).origin === baseUrl) {
+        return url;
+      }
+      // Otherwise, redirect to the base URL
       return baseUrl;
     },
     // lets you customize the session object returned to the client.
