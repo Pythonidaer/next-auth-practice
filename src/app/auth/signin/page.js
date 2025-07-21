@@ -26,8 +26,16 @@ export default function SignInPage() {
       </div>
       {/* Buttons */}
       <div className={styles.buttonGroup}>
-        <Button color="white" label="LOGIN" onClick={() => signIn('google')} />
-        <Button color="red" label="SIGNUP" onClick={() => signIn('google')} />
+        <Button
+          color="white"
+          label="LOGIN"
+          onClick={() => signIn('google', { callbackUrl: '/' })}
+        />
+        <Button
+          color="red"
+          label="SIGNUP"
+          onClick={() => signIn('google', { callbackUrl: '/' })}
+        />
       </div>
     </div>
   );
